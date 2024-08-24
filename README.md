@@ -1,0 +1,1 @@
+Flutter Video Player used in StronzLabs's applications
