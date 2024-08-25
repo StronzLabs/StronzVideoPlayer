@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -10,6 +12,9 @@ class FullScreen {
     }
 
     static Future<bool> isFullScreen() async {
+        if(!(Platform.isWindows || Platform.isLinux || Platform.isMacOS))
+            return false;
+
         FullScreen._isFullScreen.value = await windowManager.isFullScreen();
         return FullScreen._isFullScreen.value;
     }
