@@ -1,5 +1,7 @@
 library stronz_video_player;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fvp/fvp.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +48,8 @@ class StronzVideoPlayer extends StatefulWidget {
 
     static Future<void> initialize() async {
         registerWith(options: {'platforms': ['windows', 'linux']});
-        await windowManager.ensureInitialized();
+        if(Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+            await windowManager.ensureInitialized();
     }
 }
 
