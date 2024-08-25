@@ -1,5 +1,5 @@
 import 'package:flutter_hls_parser/flutter_hls_parser.dart';
-import 'package:stronz_video_player/utils/simple_http.dart' as http;
+import 'package:stronz_video_player/utils/resource_manager.dart';
 
 abstract class Track {
     final Uri uri;
@@ -101,8 +101,7 @@ abstract class TrackLoader {
     Future<Tracks> loadTracks();
 
     static Future<TrackLoader> create({required Uri source}) async {
-        // TODO check if local file, if so check magic bytes
-        String mime = await http.mime(source);
+        String mime = await ResourceManager.type(source);
 
         if (mime == "video/mp4")
             return MP4TrackLoader(source: source);
@@ -140,8 +139,7 @@ class HLSTrackLoader extends TrackLoader {
 
     @override
     Future<Tracks> loadTracks() async {
-
-        HlsPlaylist playlist = await HlsPlaylistParser.create().parseString(super.source, await http.get(super.source));
+        HlsPlaylist playlist = await HlsPlaylistParser.create().parseString(super.source, await ResourceManager.content(super.source));
         if(playlist is! HlsMasterPlaylist)
             throw Exception("Not a master playlist");
 
