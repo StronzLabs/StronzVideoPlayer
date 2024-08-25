@@ -42,7 +42,7 @@ class StronzPlayerController {
 
     late Playable _playable;
     Playable get playable => this._playable;
-    late Tracks tracks;
+    Tracks tracks = const EmptyTracks();
 
     VideoPlayerController? _videoPlayerController;
     final StreamController<VideoPlayerController?> _videoPlayerControllerStream = StreamController<VideoPlayerController?>.broadcast();
@@ -131,10 +131,18 @@ class StronzPlayerController {
         return tempHls;
     }
 
-    Future<void> _refreshHLSFile() async {
-        this._generateHLSFile();
+    Future<VideoPlayerController> _prepareVideoPlayerController() async {
+        File hls = await this._generateHLSFile();
+        if(this.tracks is HLSTracks)
+            return VideoPlayerController.file(hls);
+        else if(this.tracks is MP4Tracks)
+            return VideoPlayerController.networkUrl(this.videoTrack!.uri);
+        else
+            throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
+    }
 
-        VideoPlayerController newController = VideoPlayerController.file(await this._generateHLSFile());
+    Future<void> _refreshHLSFile() async {
+        VideoPlayerController newController = await this._prepareVideoPlayerController();
         VideoPlayerController oldController = this.videoPlayerController;
 
         bool wasPlaying = this.playing;
@@ -167,18 +175,31 @@ class StronzPlayerController {
         newController.addListener(bufferingListener);
     }
 
+    void _autoSelectTracks() {
+        if(this.tracks is HLSTracks) {
+            HLSTracks tracks = this.tracks as HLSTracks;
+            this._videoTrack = tracks.video.firstOrNull;
+            this._audioTrack = tracks.audio.firstOrNull;
+            this._captionTrack = tracks.caption.firstOrNull;
+
+        } else if (this.tracks is MP4Tracks) {
+            MP4Tracks tracks = this.tracks as MP4Tracks;
+            this._videoTrack = tracks.video;
+            this._audioTrack = null;
+            this._captionTrack = null;
+        } else
+            throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
+    }
+
     Future<void> initialize({bool autoPlay = true}) async {
         Uri source = await this.playable.source;
         TrackLoader loader = await TrackLoader.create(source: source);
         this.tracks = await loader.loadTracks();
 
-        // TODO: shared prefs
-        this._videoTrack = this.tracks.video.firstOrNull;
-        this._audioTrack = this.tracks.audio.firstOrNull;
-        this._captionTrack = this.tracks.caption.firstOrNull;
+        this._autoSelectTracks();
 
-        File hls = await this._generateHLSFile();
-        this._videoPlayerController = VideoPlayerController.file(hls);
+        this._videoPlayerController = await this._prepareVideoPlayerController();
+            
         this._videoPlayerControllerStream.add(this.videoPlayerController);
         this.videoPlayerController.addListener(this._onVideoPlayerControllerEvent);
         await this.videoPlayerController.initialize();

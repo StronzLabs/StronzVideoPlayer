@@ -47,6 +47,9 @@ class _SettingsButtonState extends State<SettingsButton> with StronzControl {
 
     @override
     Widget build(BuildContext context) {
+        if(!this._controller.tracks.hasOptions)
+            return const SizedBox.shrink();
+
         return IconButton(
             focusNode: this._focusNode,
             onPressed: () {
@@ -86,17 +89,16 @@ class _SettingsMenu extends StatefulWidget {
 
 class _SettingsMenuState extends State<_SettingsMenu> {
 
-    late final bool _hasVideoTracks = super.widget.controller.tracks.video.length > 1;
-    late final bool _hasAudioTracks = super.widget.controller.tracks.audio.length > 1;
-    late final bool _hasCaptionsTracks = super.widget.controller.tracks.caption.length > 1;
-
     int _activeSettingPage = 0;
-    late final List<Widget> _pages = [
-        this._buildMainPage(),
-        this._buildQualityPage(),
-        this._buildLanguagePage(),
-        this._buildCaptionPage(),
-    ];
+    late final Map<int, Widget> _pages = {
+        0: this._buildMainPage(),
+        if(super.widget.controller.tracks.hasVideoTrackOptions)
+            1: this._buildQualityPage(),
+        if(super.widget.controller.tracks.hasAudioTrackOptions)
+            2: this._buildLanguagePage(),
+        if(super.widget.controller.tracks.hasCaptionsTrackOptions)
+            3: this._buildCaptionPage(),
+    };
 
     Widget _buildNavigationButton(String text, int id, [bool isBack = false]) {
         List<Widget> children = [
@@ -137,18 +139,18 @@ class _SettingsMenuState extends State<_SettingsMenu> {
             children: [
                 const ListTile(title: Text("Impostazioni")),
                 const Divider(),
-                if (this._hasVideoTracks)
+                if (super.widget.controller.tracks.hasVideoTrackOptions)
                     this._buildNavigationButton("Qualità", 1),
-                if (this._hasAudioTracks)
+                if (super.widget.controller.tracks.hasAudioTrackOptions)
                     this._buildNavigationButton("Lingua", 2),
-                if (this._hasCaptionsTracks)
+                if (super.widget.controller.tracks.hasCaptionsTrackOptions)
                     this._buildNavigationButton("Sottotitoli", 3),
             ]
         );
     }
 
     Widget _buildQualityPage() {
-        List<VideoTrack> tracks = super.widget.controller.tracks.video;
+        List<VideoTrack> tracks = (super.widget.controller.tracks as HLSTracks).video;
 
         return Column(
             mainAxisSize: MainAxisSize.min,
@@ -164,7 +166,7 @@ class _SettingsMenuState extends State<_SettingsMenu> {
     }
 
     Widget _buildLanguagePage() {
-        List<AudioTrack> tracks = super.widget.controller.tracks.audio;
+        List<AudioTrack> tracks = (super.widget.controller.tracks as HLSTracks).audio;
 
         return Column(
             mainAxisSize: MainAxisSize.min,
@@ -180,7 +182,7 @@ class _SettingsMenuState extends State<_SettingsMenu> {
     }
 
     Widget _buildCaptionPage() {
-        List<CaptionTrack> tracks = super.widget.controller.tracks.caption;
+        List<CaptionTrack> tracks = (super.widget.controller.tracks as HLSTracks).caption;
 
         return Column(
             mainAxisSize: MainAxisSize.min,

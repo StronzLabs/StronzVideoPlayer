@@ -36,15 +36,58 @@ class CaptionTrack extends Track {
     });
 }
 
-class Tracks {
+abstract class Tracks {
+    bool get hasVideoTrackOptions;
+    bool get hasAudioTrackOptions;
+    bool get hasCaptionsTrackOptions;
+
+    bool get hasOptions => this.hasVideoTrackOptions || this.hasAudioTrackOptions || this.hasCaptionsTrackOptions;
+
+    const Tracks();
+}
+
+class EmptyTracks extends Tracks {
+    @override
+    bool get hasVideoTrackOptions => false;
+    @override
+    bool get hasAudioTrackOptions => false;
+    @override
+    bool get hasCaptionsTrackOptions => false;
+
+    const EmptyTracks();
+}
+
+class HLSTracks extends Tracks {
     final List<VideoTrack> video;
     final List<AudioTrack> audio;
     final List<CaptionTrack> caption;
 
-    const Tracks({
+    @override
+    bool get hasVideoTrackOptions => this.video.length > 1;
+    @override
+    bool get hasAudioTrackOptions => this.audio.length > 1;
+    @override
+    bool get hasCaptionsTrackOptions => this.caption.isNotEmpty;
+
+    const HLSTracks({
         required this.video,
         required this.audio,
         required this.caption
+    });
+}
+
+class MP4Tracks extends Tracks {
+    final VideoTrack video;
+
+    @override
+    bool get hasVideoTrackOptions => false;
+    @override
+    bool get hasAudioTrackOptions => false;
+    @override
+    bool get hasCaptionsTrackOptions => false;
+
+    const MP4Tracks({
+        required this.video
     });
 }
 
@@ -58,6 +101,7 @@ abstract class TrackLoader {
     Future<Tracks> loadTracks();
 
     static Future<TrackLoader> create({required Uri source}) async {
+        // TODO check if local file, if so check magic bytes
         String mime = await http.mime(source);
 
         if (mime == "video/mp4")
@@ -74,13 +118,11 @@ class MP4TrackLoader extends TrackLoader {
 
     @override
     Future<Tracks> loadTracks() {
-        return Future.value(Tracks(
-            video: [ VideoTrack(
+        return Future.value(MP4Tracks(
+            video: VideoTrack(
                 uri: super.source,
                 quality: 0
-            ) ],
-            audio: [],
-            caption: []
+            )
         ));
     }
 }
@@ -127,7 +169,7 @@ class HLSTrackLoader extends TrackLoader {
                 )
         ];
 
-        return Tracks(
+        return HLSTracks(
             video: video,
             audio: audio,
             caption: caption
