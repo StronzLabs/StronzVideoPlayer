@@ -21,12 +21,12 @@ class NextButton extends StatefulWidget {
 class _NextButtonState extends State<NextButton> with StronzControl {
 
     final FocusNode _focusNode = FocusNode();
-    late Watchable? _next;
+    late Playable? _next;
 
     @override
     void didChangeDependencies() {
         super.didChangeDependencies();
-        this._next = super.controller(super.context).watchable.next;
+        this._next = super.controller(super.context).playable.next;
     }
 
     @override

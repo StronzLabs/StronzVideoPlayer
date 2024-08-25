@@ -19,6 +19,7 @@ class StronzPlayerStream {
     final Stream<AudioTrack?> audioTrack;
     final Stream<CaptionTrack?> captionTrack;
     final Stream<List<DurationRange>> buffered;
+    final Stream<String> title;
 
     const StronzPlayerStream({
         required this.videoPlayerController,
@@ -32,15 +33,16 @@ class StronzPlayerStream {
         required this.videoTrack,
         required this.audioTrack,
         required this.captionTrack,
-        required this.buffered
+        required this.buffered,
+        required this.title
     });
 }
 
 class StronzPlayerController {
 
-    late Watchable watchable;
+    late Playable _playable;
+    Playable get playable => this._playable;
     late Tracks tracks;
-    String get title => this.watchable.title;
 
     VideoPlayerController? _videoPlayerController;
     final StreamController<VideoPlayerController?> _videoPlayerControllerStream = StreamController<VideoPlayerController?>.broadcast();
@@ -90,6 +92,9 @@ class StronzPlayerController {
     final StreamController<List<DurationRange>> _bufferedStream = StreamController<List<DurationRange>>.broadcast();
     List<DurationRange> get buffered => this._buffered;
 
+    final StreamController<String> _titleStream = StreamController<String>.broadcast();
+    String get title => this.playable.title;
+
     StronzPlayerStream get stream => StronzPlayerStream(
         videoPlayerController: this._videoPlayerControllerStream.stream,
         buffering: this._bufferingStream.stream,
@@ -102,12 +107,15 @@ class StronzPlayerController {
         videoTrack: this._videoTrackStream.stream,
         audioTrack: this._audioTrackStream.stream,
         captionTrack: this._captionTrackStream.stream,
-        buffered: this._bufferedStream.stream
+        buffered: this._bufferedStream.stream,
+        title: this._titleStream.stream
     );
 
     StronzPlayerController({
-        required this.watchable
-    });
+        required Playable playable
+    }) {
+        this._playable = playable;
+    }
 
     Future<File> _generateHLSFile() async {
         String hls = "#EXTM3U\n";
@@ -160,7 +168,7 @@ class StronzPlayerController {
     }
 
     Future<void> initialize({bool autoPlay = true}) async {
-        Uri source = await this.watchable.source;
+        Uri source = await this.playable.source;
         TrackLoader loader = await TrackLoader.create(source: source);
         this.tracks = await loader.loadTracks();
 
@@ -232,11 +240,13 @@ class StronzPlayerController {
         await this._refreshHLSFile();
     }
 
-    Future<void> switchTo(Watchable watchable) async {
+    Future<void> switchTo(Playable playable) async {
         this._bufferingStream.add(this._buffering = true);
         this._positionStream.add(this._position = Duration.zero);
         this._durationStream.add(this._duration = Duration.zero);
         await this.dispose(closeStreams: false);
+        this._playable = playable;
+        this._titleStream.add(this.playable.title);
         await this.initialize();
         this._bufferingStream.add(this._buffering = false);
     }

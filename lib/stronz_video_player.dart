@@ -10,37 +10,40 @@ import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/logic/stronz_player_controller.dart';
 import 'package:window_manager/window_manager.dart';
 
-abstract class Watchable {
+abstract class Playable {
     String get title;
     Future<Uri> get source;
-    Watchable? get next;
+    Playable? get next;
 
-    const Watchable();
+    const Playable();
 }
 
-class SimpleWatchable extends Watchable {
+class SimplePlayable extends Playable {
     @override
     final String title;
     @override
     Future<Uri> get source => Future.value(Uri.parse(this.url));
     @override
-    Watchable? get next => this;
+    Playable? get next => this;
     final String url;
 
-    const SimpleWatchable({
+    const SimplePlayable({
         required this.title,
         required this.url
     });
 }
 
 class StronzVideoPlayer extends StatefulWidget {
-    final Watchable watchable;
+    final Playable playable;
     final List<Widget> Function(BuildContext)? additionalControlsBuilder;
+
+    final void Function(StronzPlayerController)? onBeforeExit;
     
     const StronzVideoPlayer({
         super.key,
-        required this.watchable,
-        this.additionalControlsBuilder
+        required this.playable,
+        this.additionalControlsBuilder,
+        this.onBeforeExit
     });
 
     @override
@@ -56,7 +59,7 @@ class StronzVideoPlayer extends StatefulWidget {
 class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
     late final StronzPlayerController _playerController = StronzPlayerController(
-        watchable: super.widget.watchable
+        playable: super.widget.playable
     );
 
     @override
@@ -67,16 +70,19 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
     @override
     Widget build(BuildContext context) {
-        return Provider<StronzPlayerController>(
-            create: (context) => this._playerController,
-            child: Stack(
-                alignment: Alignment.center,
-                children: [
-                    const VideoPlayerView(),
-                    DesktopVideoPlayerControls(
-                        additionalControlsBuilder: super.widget.additionalControlsBuilder,
-                    )
-                ]
+        return PopScope(
+            onPopInvoked: (_) => super.widget.onBeforeExit?.call(this._playerController),
+            child: Provider<StronzPlayerController>(
+                create: (context) => this._playerController,
+                child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                        const VideoPlayerView(),
+                        DesktopVideoPlayerControls(
+                            additionalControlsBuilder: super.widget.additionalControlsBuilder,
+                        )
+                    ]
+                )
             )
         );
     }
