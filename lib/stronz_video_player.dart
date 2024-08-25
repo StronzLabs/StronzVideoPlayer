@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fvp/fvp.dart';
 import 'package:provider/provider.dart';
 import 'package:stronz_video_player/components/desktop_video_player_controls.dart';
+import 'package:stronz_video_player/components/mobile_video_player_controls.dart';
 import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/logic/stronz_player_controller.dart';
 import 'package:window_manager/window_manager.dart';
@@ -78,9 +79,13 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
                     alignment: Alignment.center,
                     children: [
                         const VideoPlayerView(),
-                        DesktopVideoPlayerControls(
-                            additionalControlsBuilder: super.widget.additionalControlsBuilder,
-                        )
+                        Platform.isAndroid || Platform.isIOS
+                            ? MobileVideoControls(
+                                additionalControlsBuilder: super.widget.additionalControlsBuilder,
+                            )
+                            : DesktopVideoPlayerControls(
+                                additionalControlsBuilder: super.widget.additionalControlsBuilder,
+                            )
                     ]
                 )
             )
