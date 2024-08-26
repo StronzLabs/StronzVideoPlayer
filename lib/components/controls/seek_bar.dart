@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 // import 'package:video_player/video_player.dart';
 
 class SeekBar extends StatefulWidget {
@@ -19,7 +19,7 @@ class SeekBar extends StatefulWidget {
     State<SeekBar> createState() => _SeekBarState();
 }
 
-class _SeekBarState extends State<SeekBar> with StronzControl {
+class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
     bool _hover = false;
     bool _click = false;
     double _slider = 0.0;

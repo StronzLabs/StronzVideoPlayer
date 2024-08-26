@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/logic/track_loader.dart';
-import 'package:stronz_video_player/stronz_video_player.dart';
 import 'package:video_player/video_player.dart';
 
 class StronzPlayerStream {

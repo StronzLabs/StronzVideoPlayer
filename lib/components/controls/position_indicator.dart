@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 
 class PositionIndicator extends StatefulWidget {
@@ -11,7 +11,7 @@ class PositionIndicator extends StatefulWidget {
     State<PositionIndicator> createState() => _PositionIndicatorState();
 }
 
-class _PositionIndicatorState extends State<PositionIndicator> with StreamListener, StronzControl {
+class _PositionIndicatorState extends State<PositionIndicator> with StreamListener, StronzPlayerControl {
     late Duration _position = super.controller(super.context).position;
     late Duration _duration = super.controller(super.context).duration;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stronz_player_controller.dart';
 import 'package:stronz_video_player/logic/track_loader.dart';
 
@@ -23,7 +23,7 @@ class SettingsButton extends StatefulWidget {
     State<SettingsButton> createState() => _SettingsButtonState();
 }
 
-class _SettingsButtonState extends State<SettingsButton> with StronzControl {
+class _SettingsButtonState extends State<SettingsButton> with StronzPlayerControl {
 
     late final StronzPlayerController _controller = super.controller(super.context);
     final FocusNode _focusNode = FocusNode();

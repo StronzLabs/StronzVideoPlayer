@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/components/linear_track_shape.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 import 'package:stronz_video_player/logic/stronz_player_controller.dart';
@@ -17,7 +17,7 @@ class VolumeButton extends StatefulWidget {
     State<VolumeButton> createState() => _VolumeButtonState();
 }
 
-class _VolumeButtonState extends State<VolumeButton> with StreamListener, StronzControl, SingleTickerProviderStateMixin {
+class _VolumeButtonState extends State<VolumeButton> with StreamListener, StronzPlayerControl, SingleTickerProviderStateMixin {
 
     late double _volume = super.controller(super.context).volume;
 

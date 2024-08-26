@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
-import 'package:stronz_video_player/stronz_video_player.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/data/playable.dart';
 
 class NextButton extends StatefulWidget {
     final double iconSize;
@@ -18,7 +18,7 @@ class NextButton extends StatefulWidget {
     State<NextButton> createState() => _NextButtonState();
 }
 
-class _NextButtonState extends State<NextButton> with StronzControl {
+class _NextButtonState extends State<NextButton> with StronzPlayerControl {
 
     final FocusNode _focusNode = FocusNode();
     late Playable? _next;

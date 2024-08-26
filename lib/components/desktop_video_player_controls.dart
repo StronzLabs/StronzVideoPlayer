@@ -8,7 +8,7 @@ import 'package:stronz_video_player/components/controls/playpause_button.dart';
 import 'package:stronz_video_player/components/controls/position_indicator.dart';
 import 'package:stronz_video_player/components/controls/seek_bar.dart';
 import 'package:stronz_video_player/components/controls/settings_button.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/components/controls/volume_button.dart';
 import 'package:stronz_video_player/components/video_player_controls.dart';
 import 'package:stronz_video_player/utils/fullscreen.dart';
@@ -24,7 +24,7 @@ class DesktopVideoPlayerControls extends VideoPlayerControls {
     VideoPlayerControlsState<DesktopVideoPlayerControls> createState() => _DesktopVideoControlsState();
 }
 
-class _DesktopVideoControlsState extends VideoPlayerControlsState<DesktopVideoPlayerControls> with StronzControl {
+class _DesktopVideoControlsState extends VideoPlayerControlsState<DesktopVideoPlayerControls> with StronzPlayerControl {
 
     DateTime _lastTap = DateTime.now();
     bool _hoveringControls = false;
@@ -45,10 +45,7 @@ class _DesktopVideoControlsState extends VideoPlayerControlsState<DesktopVideoPl
                         const ExitButton(),
                         const SizedBox(width: 8.0),
                         const MediaTitle(),
-                        if(super.widget.additionalControlsBuilder != null) ...[
-                            const SizedBox(width: 8.0),
-                            ...super.widget.additionalControlsBuilder!(context)
-                        ]
+                        ...super.buildAdditionalControls(context),
                     ],
                 )
             )

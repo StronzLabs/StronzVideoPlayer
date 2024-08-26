@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 
-class MediaTitle extends StatefulWidget with StronzControl {
+class MediaTitle extends StatefulWidget {
     const MediaTitle({super.key});
 
     @override
     State<MediaTitle> createState() => _MediaTitleState();
 }
 
-class _MediaTitleState extends State<MediaTitle> with StreamListener, StronzControl{
+class _MediaTitleState extends State<MediaTitle> with StreamListener, StronzPlayerControl {
 
     late String _title = super.controller(super.context).title;
 

@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 import 'package:video_player/video_player.dart';
 
@@ -11,7 +11,7 @@ class VideoPlayerView extends StatefulWidget {
     State<VideoPlayerView> createState() => _VideoPlayerViewState();
 }
 
-class _VideoPlayerViewState extends State<VideoPlayerView> with StreamListener, StronzControl {
+class _VideoPlayerViewState extends State<VideoPlayerView> with StreamListener, StronzPlayerControl {
 
     final AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
     

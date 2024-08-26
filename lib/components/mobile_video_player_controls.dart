@@ -7,7 +7,7 @@ import 'package:stronz_video_player/components/controls/playpause_button.dart';
 import 'package:stronz_video_player/components/controls/position_indicator.dart';
 import 'package:stronz_video_player/components/controls/seek_bar.dart';
 import 'package:stronz_video_player/components/controls/settings_button.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/components/controls/volume_button.dart';
 import 'package:stronz_video_player/components/video_player_controls.dart';
 
@@ -23,7 +23,7 @@ class MobileVideoControls extends VideoPlayerControls {
     VideoPlayerControlsState<MobileVideoControls> createState() => _MobileVideoControlsState();
 }
 
-class _MobileVideoControlsState  extends VideoPlayerControlsState<MobileVideoControls> with StronzControl {
+class _MobileVideoControlsState  extends VideoPlayerControlsState<MobileVideoControls> with StronzPlayerControl {
 
     @override
     Widget buildTopBar(BuildContext context) {
@@ -35,11 +35,7 @@ class _MobileVideoControlsState  extends VideoPlayerControlsState<MobileVideoCon
                     const ExitButton(),
                     const SizedBox(width: 8.0),
                     const MediaTitle(),
-                    const SizedBox(width: 8.0),
-                    if(super.widget.additionalControlsBuilder != null) ...[
-                        const SizedBox(width: 8.0),
-                        ...super.widget.additionalControlsBuilder!(context)
-                    ]
+                    ...super.buildAdditionalControls(context),
                 ],
             ),
         );

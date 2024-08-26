@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 
 class PlayPauseButton extends StatefulWidget {
@@ -18,7 +18,7 @@ class PlayPauseButton extends StatefulWidget {
     State<PlayPauseButton> createState() => _PlayPauseButtonState();
 }
 
-class _PlayPauseButtonState extends State<PlayPauseButton> with StreamListener, StronzControl, SingleTickerProviderStateMixin {
+class _PlayPauseButtonState extends State<PlayPauseButton> with StreamListener, StronzPlayerControl, SingleTickerProviderStateMixin {
     
     final FocusNode _focusNode = FocusNode();
     late final AnimationController _animation = AnimationController(

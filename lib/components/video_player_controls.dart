@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_control.dart';
+import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
+import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 import 'package:stronz_video_player/utils/fullscreen.dart';
 
 abstract class VideoPlayerControls extends StatefulWidget {
-    final List<Widget> Function(BuildContext)? additionalControlsBuilder;
+    final AdditionalStronzControlsBuilder? additionalControlsBuilder;
 
     const VideoPlayerControls({
         super.key,
@@ -17,7 +18,7 @@ abstract class VideoPlayerControls extends StatefulWidget {
     VideoPlayerControlsState<VideoPlayerControls> createState();
 }
 
-abstract class VideoPlayerControlsState<T extends VideoPlayerControls> extends State<T> with StreamListener, StronzControl {
+abstract class VideoPlayerControlsState<T extends VideoPlayerControls> extends State<T> with StreamListener, StronzPlayerControl {
     late bool _buffering = super.controller(super.context).buffering;
     bool visible = true;
     bool mount = true;
@@ -111,6 +112,10 @@ abstract class VideoPlayerControlsState<T extends VideoPlayerControls> extends S
     Widget buildPrimaryBar(BuildContext context);
     Widget buildBottomBar(BuildContext context);
     Widget buildSeekBar(BuildContext context);
+
+    List<Widget> buildAdditionalControls(BuildContext context) {
+        return super.widget.additionalControlsBuilder?.call(context, this.onMenuOpened, this.onMenuClosed) ?? [];
+    }
 
     Widget buildControls(BuildContext context) {
         return Stack(
