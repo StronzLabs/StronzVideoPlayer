@@ -46,6 +46,7 @@ class StronzPlayerController {
 
     VideoPlayerController? _videoPlayerController;
     final StreamController<VideoPlayerController?> _videoPlayerControllerStream = StreamController<VideoPlayerController?>.broadcast();
+    VideoPlayerController? get videoPlayerControllerOrNull => this._videoPlayerController;
     VideoPlayerController get videoPlayerController => this._videoPlayerController!;
 
     bool _buffering = true;
@@ -203,6 +204,7 @@ class StronzPlayerController {
         this._videoPlayerControllerStream.add(this.videoPlayerController);
         this.videoPlayerController.addListener(this._onVideoPlayerControllerEvent);
         await this.videoPlayerController.initialize();
+        this._videoPlayerControllerStream.add(this.videoPlayerController);
 
         if(autoPlay)
             await this.videoPlayerController.play();

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fvp/fvp.dart';
 import 'package:provider/provider.dart';
@@ -40,10 +41,27 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
         playable: super.widget.playable
     );
 
+    final AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
+
     @override
     void dispose() {
         this._playerController.dispose();
         super.dispose();
+    }
+
+    Widget _buildVideoPlayer(BuildContext context) {
+        return FutureBuilder(
+            future: this._controllerMemoizer.runOnce(this._playerController.initialize),
+            builder: (context, snapshot) {
+                if(snapshot.hasError)
+                    Future.microtask(() => this._errorPlaying());
+                
+                if (snapshot.connectionState != ConnectionState.done)
+                    return const SizedBox.shrink();
+                    
+                return const VideoPlayerView();
+            }
+        );
     }
 
     @override
@@ -55,8 +73,7 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
                 child: Stack(
                     alignment: Alignment.center,
                     children: [
-                        const VideoPlayerView(),
-
+                        this._buildVideoPlayer(context),
                         super.widget.controlsBuilder?.call(context)
                         ?? AdaptiveStronzVideoPlayerControls(
                             additionalControlsBuilder: super.widget.additionalControlsBuilder,
@@ -65,5 +82,23 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
                 )
             )
         );
+    }
+
+    Future<void> _errorPlaying() async {
+        await showDialog(
+            context: super.context,
+            builder: (context) => AlertDialog(
+                title: const Text('Errore imprevisto'),
+                content: const Text('Si è verificato un errore durante la riproduzione, riprova più tardi.'),
+                actions: [
+                    TextButton(
+                        onPressed: () => Navigator.of(super.context).pop(),
+                        child: const Text('Torna indietro')
+                    )
+                ],
+            )
+        );
+        if(super.mounted)
+            Navigator.of(super.context).pop();
     }
 }
