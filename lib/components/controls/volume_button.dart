@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/components/linear_track_shape.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
-import 'package:stronz_video_player/logic/stronz_player_controller.dart';
+import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 
 class VolumeButton extends StatefulWidget {
     final double iconSize;

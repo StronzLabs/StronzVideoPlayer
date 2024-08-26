@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
 import 'package:video_player/video_player.dart';
 
@@ -10,7 +11,7 @@ class VideoPlayerView extends StatefulWidget {
     State<VideoPlayerView> createState() => _VideoPlayerViewState();
 }
 
-class _VideoPlayerViewState extends State<VideoPlayerView> with StreamListener, StronzPlayerControl {
+class _VideoPlayerViewState extends State<VideoPlayerView> with StreamListener, StronzPlayerControl<NativePlayerController> {
     
     late double _aspectRatio = super.controller(super.context).aspectRatio;
     late VideoPlayerController? _videoPlayerController = super.controller(super.context).videoPlayerControllerOrNull;
@@ -22,7 +23,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> with StreamListener, 
             super.controller(super.context).stream.aspectRatio.listen((aspectRatio) {
                 this.setState(() => this._aspectRatio = aspectRatio);
             }),
-            super.controller(super.context).stream.videoPlayerController.listen((videoPlayerController) {
+            super.controller(super.context).videoPlayerControllerStream.listen((videoPlayerController) {
                 this.setState(() => this._videoPlayerController = videoPlayerController);
             })
         ]);

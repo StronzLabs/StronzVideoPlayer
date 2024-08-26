@@ -3,101 +3,76 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:stronz_video_player/data/playable.dart';
+import 'package:stronz_video_player/data/tracks.dart';
+import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:stronz_video_player/data/player_stream.dart';
 import 'package:stronz_video_player/logic/track_loader.dart';
 import 'package:video_player/video_player.dart';
 
-class StronzPlayerStream {
-    final Stream<VideoPlayerController?> videoPlayerController;
-    final Stream<bool> buffering;
-    final Stream<double> aspectRatio;
-    final Stream<bool> playing;
-    final Stream<Duration> position;
-    final Stream<double> volume;
-    final Stream<Duration> duration;
-    final Stream<bool> completed;
-    final Stream<VideoTrack?> videoTrack;
-    final Stream<AudioTrack?> audioTrack;
-    final Stream<CaptionTrack?> captionTrack;
-    final Stream<List<DurationRange>> buffered;
-    final Stream<String> title;
+class NativePlayerController extends StronzPlayerController {
 
-    const StronzPlayerStream({
-        required this.videoPlayerController,
-        required this.buffering,
-        required this.aspectRatio,
-        required this.playing,
-        required this.position,
-        required this.volume,
-        required this.duration,
-        required this.completed,
-        required this.videoTrack,
-        required this.audioTrack,
-        required this.captionTrack,
-        required this.buffered,
-        required this.title
-    });
-}
-
-class StronzPlayerController {
-
-    late Playable _playable;
-    Playable get playable => this._playable;
+    @override
     Tracks tracks = const EmptyTracks();
 
-    VideoPlayerController? _videoPlayerController;
-    final StreamController<VideoPlayerController?> _videoPlayerControllerStream = StreamController<VideoPlayerController?>.broadcast();
-    VideoPlayerController? get videoPlayerControllerOrNull => this._videoPlayerController;
-    VideoPlayerController get videoPlayerController => this._videoPlayerController!;
-
+    @override
+    bool get buffering => this._buffering;
     bool _buffering = true;
     final StreamController<bool> _bufferingStream = StreamController<bool>.broadcast();
-    bool get buffering => this._buffering;
     
+    @override
+    double get aspectRatio => this._aspectRatio;
     double _aspectRatio = 1.0;
     final StreamController<double> _aspectRatioStream = StreamController<double>.broadcast();
-    double get aspectRatio => this._aspectRatio;
 
+    @override
+    bool get playing => this._playing;
     bool _playing = false;
     final StreamController<bool> _playingStream = StreamController<bool>.broadcast();
-    bool get playing => this._playing;
 
+    @override
+    Duration get position => this._position;
     Duration _position = Duration.zero;
     final StreamController<Duration> _positionStream = StreamController<Duration>.broadcast();
-    Duration get position => this._position;
 
+    @override
+    double get volume => this._volume;
     double _volume = 1.0;
     final StreamController<double> _volumeStream = StreamController<double>.broadcast();
-    double get volume => this._volume;
 
+    @override
+    Duration get duration => this._duration;
     Duration _duration = Duration.zero;
     final StreamController<Duration> _durationStream = StreamController<Duration>.broadcast();
-    Duration get duration => this._duration;
 
+    @override
+    bool get completed => this._completed;
     bool _completed = false;
     final StreamController<bool> _completedStream = StreamController<bool>.broadcast();
-    bool get completed => this._completed;
 
+    @override
+    VideoTrack? get videoTrack => this._videoTrack;
     VideoTrack? _videoTrack;
     final StreamController<VideoTrack?> _videoTrackStream = StreamController<VideoTrack?>.broadcast();
-    VideoTrack? get videoTrack => this._videoTrack;
 
+    @override
+    AudioTrack? get audioTrack => this._audioTrack;
     AudioTrack? _audioTrack;
     final StreamController<AudioTrack?> _audioTrackStream = StreamController<AudioTrack?>.broadcast();
-    AudioTrack? get audioTrack => this._audioTrack;
 
+    @override
+    CaptionTrack? get captionTrack => this._captionTrack;
     CaptionTrack? _captionTrack;
     final StreamController<CaptionTrack?> _captionTrackStream = StreamController<CaptionTrack?>.broadcast();
-    CaptionTrack? get captionTrack => this._captionTrack;
 
+    @override
+    List<DurationRange> get buffered => this._buffered;
     List<DurationRange> _buffered = [];
     final StreamController<List<DurationRange>> _bufferedStream = StreamController<List<DurationRange>>.broadcast();
-    List<DurationRange> get buffered => this._buffered;
 
     final StreamController<String> _titleStream = StreamController<String>.broadcast();
-    String get title => this.playable.title;
 
+    @override
     StronzPlayerStream get stream => StronzPlayerStream(
-        videoPlayerController: this._videoPlayerControllerStream.stream,
         buffering: this._bufferingStream.stream,
         aspectRatio: this._aspectRatioStream.stream,
         playing: this._playingStream.stream,
@@ -112,11 +87,11 @@ class StronzPlayerController {
         title: this._titleStream.stream
     );
 
-    StronzPlayerController({
-        required Playable playable
-    }) {
-        this._playable = playable;
-    }
+    VideoPlayerController? _videoPlayerController;
+    final StreamController<VideoPlayerController?> _videoPlayerControllerController = StreamController<VideoPlayerController?>.broadcast();
+    Stream<VideoPlayerController?> get videoPlayerControllerStream => this._videoPlayerControllerController.stream;
+    VideoPlayerController? get videoPlayerControllerOrNull => this._videoPlayerController;
+    VideoPlayerController get videoPlayerController => this._videoPlayerController!;
 
     Future<File> _generateHLSFile() async {
         String hls = "#EXTM3U\n";
@@ -166,7 +141,7 @@ class StronzPlayerController {
                 newController.addListener(this._onVideoPlayerControllerEvent);
                 
                 this._videoPlayerController = newController;
-                this._videoPlayerControllerStream.add(newController);
+                this._videoPlayerControllerController.add(newController);
                 
                 this._bufferingStream.add(this._buffering = false);
                 oldController.dispose();
@@ -192,7 +167,10 @@ class StronzPlayerController {
             throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
     }
 
-    Future<void> initialize({bool autoPlay = true}) async {
+    @override
+    Future<void> initialize(Playable playable, {bool autoPlay = true}) async {
+        await super.initialize(playable);
+        
         Uri source = await this.playable.source;
         TrackLoader loader = await TrackLoader.create(source: source);
         this.tracks = await loader.loadTracks();
@@ -201,22 +179,23 @@ class StronzPlayerController {
 
         this._videoPlayerController = await this._prepareVideoPlayerController();
             
-        this._videoPlayerControllerStream.add(this.videoPlayerController);
+        this._videoPlayerControllerController.add(this.videoPlayerController);
         this.videoPlayerController.addListener(this._onVideoPlayerControllerEvent);
         await this.videoPlayerController.initialize();
-        this._videoPlayerControllerStream.add(this.videoPlayerController);
+        this._videoPlayerControllerController.add(this.videoPlayerController);
 
         if(autoPlay)
             await this.videoPlayerController.play();
     }
 
+    @override
     Future<void> dispose({bool closeStreams = true}) async {
         await this._videoPlayerController?.dispose();
-        this._videoPlayerControllerStream.add(null);
+        this._videoPlayerControllerController.add(null);
         this._videoPlayerController = null;
 
         if(closeStreams) {
-            this._videoPlayerControllerStream.close();
+            this._videoPlayerControllerController.close();
             this._bufferingStream.close();
             this._aspectRatioStream.close();
             this._playingStream.close();
@@ -232,45 +211,47 @@ class StronzPlayerController {
         }
     }
 
+    @override
     Future<void> play() => this.videoPlayerController.play();
+    @override
     Future<void> pause() => this.videoPlayerController.pause();
+    @override
     Future<void> setVolume(double volume) => this.videoPlayerController.setVolume(volume);
-
-    Future<void> playOrPause() {
-        if(this.playing)
-            return this.pause();
-        else
-            return this.play();
-    }
-
+    @override
     Future<void> seekTo(Duration position) => this.videoPlayerController.seekTo(position);
 
+    @override
     Future<void> setVideoTrack(VideoTrack? track) async {
         this._videoTrack = track;
         this._videoTrackStream.add(this._videoTrack);
         await this._refreshHLSFile();        
     }
 
+    @override
     Future<void> setAudioTrack(AudioTrack? track) async {
         this._audioTrack = track;
         this._audioTrackStream.add(this._audioTrack);
         await this._refreshHLSFile();
     }
 
+    @override
     Future<void> setCaptionTrack(CaptionTrack? track) async {
         this._captionTrack = track;
         this._captionTrackStream.add(this._captionTrack);
         await this._refreshHLSFile();
     }
 
+    @override
     Future<void> switchTo(Playable playable) async {
         this._bufferingStream.add(this._buffering = true);
         this._positionStream.add(this._position = Duration.zero);
         this._durationStream.add(this._duration = Duration.zero);
         await this.dispose(closeStreams: false);
-        this._playable = playable;
+
+        await super.switchTo(playable);
+        
         this._titleStream.add(this.playable.title);
-        await this.initialize();
+        await this.initialize(playable);
         this._bufferingStream.add(this._buffering = false);
     }
 

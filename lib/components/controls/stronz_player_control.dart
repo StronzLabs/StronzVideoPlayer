@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronz_video_player/logic/stronz_player_controller.dart';
+import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 
-mixin StronzPlayerControl {
-    StronzPlayerController controller(BuildContext context, {bool listen = true}) => Provider.of<StronzPlayerController>(context, listen: listen);
+mixin StronzPlayerControl<T extends StronzPlayerController> {
+    T controller(BuildContext context, {bool listen = true}) {
+        return Provider.of<StronzPlayerController>(context, listen: listen) as T;
+    }
 }

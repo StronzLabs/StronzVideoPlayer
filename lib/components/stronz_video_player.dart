@@ -7,21 +7,26 @@ import 'package:provider/provider.dart';
 import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/data/playable.dart';
-import 'package:stronz_video_player/logic/stronz_player_controller.dart';
+import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
+import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:window_manager/window_manager.dart';
 
 class StronzVideoPlayer extends StatefulWidget {
     final Playable playable;
+    final StronzPlayerController? controller;
     final AdditionalStronzControlsBuilder? additionalControlsBuilder;
     final Widget Function(BuildContext)? controlsBuilder;
+    final Widget Function(BuildContext)? videoBuilder;
 
     final void Function(StronzPlayerController)? onBeforeExit;
     
     const StronzVideoPlayer({
         super.key,
         required this.playable,
+        this.controller,
         this.additionalControlsBuilder,
         this.controlsBuilder,
+        this.videoBuilder,
         this.onBeforeExit
     });
 
@@ -37,11 +42,15 @@ class StronzVideoPlayer extends StatefulWidget {
 
 class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
-    late final StronzPlayerController _playerController = StronzPlayerController(
-        playable: super.widget.playable
-    );
+    late final StronzPlayerController _playerController;
 
     final AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
+
+    @override
+    void initState() {
+        super.initState();
+        this._playerController = super.widget.controller ?? NativePlayerController();
+    }
 
     @override
     void dispose() {
@@ -51,15 +60,15 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
     Widget _buildVideoPlayer(BuildContext context) {
         return FutureBuilder(
-            future: this._controllerMemoizer.runOnce(this._playerController.initialize),
+            future: this._controllerMemoizer.runOnce(() => this._playerController.initialize(super.widget.playable)),
             builder: (context, snapshot) {
                 if(snapshot.hasError)
                     Future.microtask(() => this._errorPlaying());
                 
                 if (snapshot.connectionState != ConnectionState.done)
                     return const SizedBox.shrink();
-                    
-                return const VideoPlayerView();
+                
+                return super.widget.videoBuilder?.call(context) ?? const VideoPlayerView();
             }
         );
     }
