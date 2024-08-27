@@ -8,8 +8,8 @@ mixin StreamListener {
             this._subscriptions.addAll(iterable);
     }
 
-    void disposeSubscriptions() {
+    Future<void> disposeSubscriptions() async {
         for (StreamSubscription subscription in this._subscriptions)
-            subscription.cancel();
+            await subscription.cancel();
     }
 }
