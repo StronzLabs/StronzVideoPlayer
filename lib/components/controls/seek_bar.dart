@@ -51,6 +51,7 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
                 super.controller(super.context).stream.duration.listen(
                     (event) => this.setState(() => this._duration = event)
                 ),
+                // TODO: buffer
                 // StronzPlayerController.of(context).stream.buffered.listen(
                 //     (event) => this.setState(() => this._buffer = event)
                 // ),
