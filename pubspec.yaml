@@ -20,6 +20,13 @@ dependencies:
   path_provider: ^2.1.4
   window_manager: ^0.4.2
   mime: ^1.0.5
+  audio_service: ^0.18.15
+  image: ^4.2.0
+  smtc_windows:
+    git:
+      url: https://github.com/Bonfra04/smtc_windows.git
+      path: ./packages/smtc_windows
+      ref: main
 
 dev_dependencies:
   flutter_test:
