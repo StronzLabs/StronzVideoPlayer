@@ -32,10 +32,11 @@ class _PlayPauseButtonState extends State<PlayPauseButton> with StreamListener, 
         super.didChangeDependencies();
         super.updateSubscriptions([
             super.controller(super.context).stream.playing.listen((event) {
-                if (event)
-                    this._animation.forward();
-                else
-                    this._animation.reverse();
+                if(super.mounted)
+                    if (event)
+                        this._animation.forward();
+                    else
+                        this._animation.reverse();
             })
         ]);
     }
