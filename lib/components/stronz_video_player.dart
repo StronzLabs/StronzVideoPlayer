@@ -67,6 +67,12 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
     }
 
     @override
+    void dispose() {
+        this._playerController.dispose();
+        super.dispose();
+    }
+
+    @override
     Widget build(BuildContext context) {
         if(this._playerController.runtimeType != super.widget.controller.runtimeType) {
             this._playerController.dispose();
