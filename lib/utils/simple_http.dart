@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
@@ -44,6 +45,14 @@ Future<Request> _head(dynamic url, {Map<String, String>? headers, bool followRed
 
 Future<String> get(dynamic url, {Map<String, String>? headers, bool followRedirects = true, Duration? timeout, int maxRetries = 1}) async {
     return (await _get(url, headers: headers, followRedirects: followRedirects, timeout: timeout, maxRetries: maxRetries)).body;
+}
+
+Future<Uint8List> fetchResource(dynamic url, {Duration? timeout}) async {
+    Response response = await _get(url, timeout: timeout);
+    if (response.statusCode != 200)
+        return Uint8List(0);
+
+    return response.bodyBytes;
 }
 
 Future<String> mime(dynamic url, {Map<String, String>? headers, bool followRedirects = true}) async {

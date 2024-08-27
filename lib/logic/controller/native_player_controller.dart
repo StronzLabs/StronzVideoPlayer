@@ -126,9 +126,17 @@ class NativePlayerController extends StronzPlayerController {
     }
 
     @override
-    Future<void> play() => this.videoPlayerController.play();
+    Future<void> play() async {
+        await super.play();
+        await this.videoPlayerController.play();
+    }
+
     @override
-    Future<void> pause() => this.videoPlayerController.pause();
+    Future<void> pause() async {
+        await super.pause();
+        await this.videoPlayerController.pause();
+    }
+
     @override
     Future<void> setVolume(double volume) => this.videoPlayerController.setVolume(volume);
     @override

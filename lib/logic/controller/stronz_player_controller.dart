@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/player_stream.dart';
 import 'package:stronz_video_player/data/tracks.dart';
+import 'package:stronz_video_player/logic/media_session.dart';
 import 'package:video_player/video_player.dart';
 
 abstract class StronzPlayerController {
@@ -132,6 +133,11 @@ abstract class StronzPlayerController {
     @mustCallSuper
     Future<void> initialize(Playable playable, {bool autoPlay = true}) async {
         this._playable = playable;
+
+        await MediaSession.start(this.title, this._playable.thumbnail, (event) => switch (event) {
+            MediaSessionEvent.play => this.play(),
+            MediaSessionEvent.pause => this.pause(),
+        });
     }
 
     @mustCallSuper
@@ -148,10 +154,20 @@ abstract class StronzPlayerController {
         this._captionTrackStreamController.close();
         this._bufferedStreamController.close();
         this._titleStreamController.close();
+
+        await MediaSession.stop();
     }
 
-    Future<void> play();
-    Future<void> pause();
+    @mustCallSuper
+    Future<void> play() async {
+        await MediaSession.informPlaying();
+    }
+
+    @mustCallSuper
+    Future<void> pause() async {
+        await MediaSession.informPaused();
+    }
+
     Future<void> setVolume(double volume);
     Future<void> seekTo(Duration position);
     Future<void> setVideoTrack(VideoTrack? track);
@@ -169,5 +185,11 @@ abstract class StronzPlayerController {
     Future<void> switchTo(Playable playable) async {
         this._playable = playable;
         this._titleStreamController.add(this.playable.title);
+        
+        await MediaSession.stop();
+        await MediaSession.start(this.title, this.playable.thumbnail, (event) => switch (event) {
+            MediaSessionEvent.play => this.play(),
+            MediaSessionEvent.pause => this.pause(),
+        });
     }
 }
