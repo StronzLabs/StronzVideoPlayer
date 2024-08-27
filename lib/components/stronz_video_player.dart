@@ -2,39 +2,45 @@ import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:fvp/fvp.dart';
 import 'package:provider/provider.dart';
 import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:window_manager/window_manager.dart';
 
 class StronzVideoPlayer extends StatefulWidget {
     final Playable playable;
-    final StronzPlayerController? controller;
+    final StronzPlayerController controller;
     final AdditionalStronzControlsBuilder? additionalControlsBuilder;
     final Widget Function(BuildContext)? controlsBuilder;
     final Widget Function(BuildContext)? videoBuilder;
 
     final void Function(StronzPlayerController)? onBeforeExit;
     
-    const StronzVideoPlayer({
+    StronzVideoPlayer({
         super.key,
         required this.playable,
-        this.controller,
+        StronzPlayerController? controller,
         this.additionalControlsBuilder,
         this.controlsBuilder,
         this.videoBuilder,
         this.onBeforeExit
-    });
+    }) : this.controller = controller ?? NativePlayerController();
 
     @override
     State<StronzVideoPlayer> createState() => _StronzVideoPlayerState();
 
     static Future<void> initialize() async {
-        registerWith(options: {'platforms': ['windows', 'linux']});
+        VideoPlayerMediaKit.ensureInitialized(
+            android: true,
+            iOS: true,
+            macOS: true,
+            windows: true,
+            linux: true,
+        );
         if(Platform.isWindows || Platform.isLinux || Platform.isMacOS)
             await windowManager.ensureInitialized();
     }
@@ -42,21 +48,8 @@ class StronzVideoPlayer extends StatefulWidget {
 
 class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
-    late final StronzPlayerController _playerController;
-
-    final AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
-
-    @override
-    void initState() {
-        super.initState();
-        this._playerController = super.widget.controller ?? NativePlayerController();
-    }
-
-    @override
-    void dispose() {
-        this._playerController.dispose();
-        super.dispose();
-    }
+    late StronzPlayerController _playerController = super.widget.controller;
+    AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
 
     Widget _buildVideoPlayer(BuildContext context) {
         return FutureBuilder(
@@ -75,10 +68,17 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
     @override
     Widget build(BuildContext context) {
+        if(this._playerController.runtimeType != super.widget.controller.runtimeType) {
+            this._playerController.dispose();
+            this._playerController = super.widget.controller;
+            this._playerController.initialize(super.widget.playable).onError((e, s) => this._errorPlaying());
+            this._controllerMemoizer = AsyncMemoizer();
+        }
+
         return PopScope(
             onPopInvokedWithResult: (_, __) => super.widget.onBeforeExit?.call(this._playerController),
-            child: Provider<StronzPlayerController>(
-                create: (context) => this._playerController,
+            child: Provider<StronzPlayerController>.value(
+                value: this._playerController,
                 child: Stack(
                     alignment: Alignment.center,
                     children: [
