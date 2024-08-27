@@ -1,6 +1,6 @@
 import 'package:flutter_hls_parser/flutter_hls_parser.dart';
 import 'package:stronz_video_player/data/tracks.dart';
-import 'package:stronz_video_player/utils/resource_manager.dart';
+import 'package:stronz_video_player/logic/resources/resource_manager.dart';
 
 abstract class TrackLoader {
     final Uri source;

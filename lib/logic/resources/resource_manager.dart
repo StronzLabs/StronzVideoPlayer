@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:mime/mime.dart';
-import 'package:stronz_video_player/utils/simple_http.dart' as http;
+import 'package:stronz_video_player/logic/resources/simple_http.dart' as http;
 
 class ResourceManager {
     static Future<String> type(Uri uri) async {
