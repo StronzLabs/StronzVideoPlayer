@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:async/async.dart';
@@ -48,27 +49,23 @@ class StronzVideoPlayer extends StatefulWidget {
 
 class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
 
+    late Playable _currentPlayable = super.widget.playable;
     late StronzPlayerController _playerController = super.widget.controller;
     AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
+    StreamSubscription? _titleSubscription;
 
-    Widget _buildVideoPlayer(BuildContext context) {
-        return FutureBuilder(
-            future: this._controllerMemoizer.runOnce(() => this._playerController.initialize(super.widget.playable)),
-            builder: (context, snapshot) {
-                if(snapshot.hasError)
-                    Future.microtask(() => this._errorPlaying());
-                
-                if (snapshot.connectionState != ConnectionState.done)
-                    return const SizedBox.shrink();
-                
-                return super.widget.videoBuilder?.call(context) ?? const VideoPlayerView();
-            }
+    Future<void> _initController() async {
+        await this._playerController.initialize(this._currentPlayable);
+        await this._titleSubscription?.cancel();
+        this._titleSubscription = this._playerController.stream.title.listen(
+            (title) => this._currentPlayable = this._playerController.playable
         );
     }
 
     @override
     void dispose() {
         this._playerController.dispose();
+        this._titleSubscription?.cancel();
         super.dispose();
     }
 
@@ -77,24 +74,36 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
         if(this._playerController.runtimeType != super.widget.controller.runtimeType) {
             this._playerController.dispose();
             this._playerController = super.widget.controller;
-            this._playerController.initialize(super.widget.playable).onError((e, s) => this._errorPlaying());
             this._controllerMemoizer = AsyncMemoizer();
         }
 
         return PopScope(
             onPopInvokedWithResult: (_, __) => super.widget.onBeforeExit?.call(this._playerController),
-            child: Provider<StronzPlayerController>.value(
-                value: this._playerController,
-                child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                        this._buildVideoPlayer(context),
-                        super.widget.controlsBuilder?.call(context)
-                        ?? AdaptiveStronzVideoPlayerControls(
-                            additionalControlsBuilder: super.widget.additionalControlsBuilder,
+            child: FutureBuilder(
+                future: this._controllerMemoizer.runOnce(this._initController),
+                builder: (context, snapshot) {
+                    if(snapshot.hasError)
+                        Future.microtask(() => this._errorPlaying());
+                    
+                    if (snapshot.connectionState != ConnectionState.done)
+                        return const Center(child: CircularProgressIndicator());
+
+                    return Provider<StronzPlayerController>.value(
+                        value: this._playerController,
+                        child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                                super.widget.videoBuilder?.call(context)
+                                ?? const VideoPlayerView(),
+                                
+                                super.widget.controlsBuilder?.call(context)
+                                ?? AdaptiveStronzVideoPlayerControls(
+                                    additionalControlsBuilder: super.widget.additionalControlsBuilder,
+                                )
+                            ]
                         )
-                    ]
-                )
+                    );
+                }
             )
         );
     }
