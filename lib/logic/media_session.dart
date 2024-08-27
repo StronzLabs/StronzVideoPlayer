@@ -41,7 +41,7 @@ class _WindowsMediaSession extends _MediaSession {
         if (thumbnail.scheme == 'http' || thumbnail.scheme == 'https')
             thumbnailBytes = await http.fetchResource(thumbnail);
         else
-            thumbnailBytes = File.fromUri(thumbnail).readAsBytesSync();
+            thumbnailBytes = File(thumbnail.toString()).readAsBytesSync();
 
         img.Image? image = img.decodeImage(thumbnailBytes);
         if (image != null)
@@ -54,7 +54,7 @@ class _WindowsMediaSession extends _MediaSession {
         this._smtc = SMTCWindows(
             metadata: MusicMetadata(
                 title: title,
-                albumArtist: 'Stronzflix',
+                albumArtist: 'StronzVideoPlayer',
                 thumbnailStream: await fetchThumbnail(thumbnail)
             ),
             config: const SMTCConfig(
