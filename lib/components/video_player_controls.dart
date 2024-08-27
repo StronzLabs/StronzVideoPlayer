@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
-import 'package:stronz_video_player/utils/fullscreen.dart';
+import 'package:stronz_video_player/logic/fullscreen.dart';
 
 abstract class VideoPlayerControls extends StatefulWidget {
     final AdditionalStronzControlsBuilder? additionalControlsBuilder;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/utils/fullscreen.dart';
+import 'package:stronz_video_player/logic/fullscreen.dart';
 
 class ExitButton extends StatelessWidget {
     final double iconSize;

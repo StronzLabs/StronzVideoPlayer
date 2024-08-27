@@ -5,7 +5,7 @@ import 'dart:typed_data';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:smtc_windows/smtc_windows.dart';
-import 'package:stronz_video_player/utils/simple_http.dart' as http;
+import 'package:stronz_video_player/logic/resources/simple_http.dart' as http;
 
 import 'package:image/image.dart' as img;
 
