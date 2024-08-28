@@ -171,7 +171,7 @@ class AudioPlayerHandler extends BaseAudioHandler {
     
         super.mediaItem.add(MediaItem(
             id: title,
-            album: "Stronzflix",
+            album: "StronzVideoPlayer",
             title: title,
             artUri: thumbnail
         ));

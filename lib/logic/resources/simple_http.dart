@@ -8,7 +8,7 @@ Future<Response> _get(dynamic url, {Map<String, String>? headers, bool followRed
     assert(url is String || url is Uri);
     headers ??= {};
     if(!headers.containsKey("User-Agent"))
-        headers["User-Agent"] = "Stronzflix";
+        headers["User-Agent"] = "StronzVideoPlayer";
 
     HttpClient client = HttpClient();
     client.connectionTimeout = timeout;
