@@ -39,9 +39,6 @@ class StronzVideoPlayer extends StatefulWidget {
 
     static Future<void> initialize() async {
         VideoPlayerMediaKit.ensureInitialized(
-            android: true,
-            iOS: true,
-            macOS: true,
             windows: true,
             linux: true,
         );
