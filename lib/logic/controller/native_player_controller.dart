@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
@@ -94,7 +95,7 @@ class NativePlayerController extends StronzPlayerController {
     }
 
     @override
-    Future<void> initialize(Playable playable, {bool autoPlay = true}) async {
+    Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
         await super.initialize(playable);
         
         Uri source = await this.playable.source;
@@ -109,8 +110,14 @@ class NativePlayerController extends StronzPlayerController {
         await this.videoPlayerController.initialize();
         this._videoPlayerControllerController.add(this.videoPlayerController);
 
-        if(autoPlay)
-            await this.videoPlayerController.play();
+        if(initialState == null)
+            return;
+        if(initialState.playing ?? false)
+            await this.play();
+        if(initialState.position != null)
+            await this.seekTo(initialState.position!);
+        if(initialState.volume != null)
+            await this.setVolume(initialState.volume!);
     }
 
     Future<void> _disposeVideoPlayerController() async {

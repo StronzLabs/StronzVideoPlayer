@@ -6,11 +6,11 @@ import 'package:stronz_video_player/components/mobile_video_player_controls.dart
 
 typedef AdditionalStronzControlsBuilder = List<Widget> Function(BuildContext context, void Function() onMenuOpened, void Function() onMenuClosed);
 
-class AdaptiveStronzVideoPlayerControls extends StatelessWidget {
+class AdaptiveVideoPlayerControls extends StatelessWidget {
 
     final AdditionalStronzControlsBuilder? additionalControlsBuilder;
 
-    const AdaptiveStronzVideoPlayerControls({
+    const AdaptiveVideoPlayerControls({
         super.key,
         this.additionalControlsBuilder
     });

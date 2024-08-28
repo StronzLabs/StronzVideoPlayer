@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/data/playable.dart';
+import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
@@ -15,6 +16,7 @@ import 'package:window_manager/window_manager.dart';
 class StronzVideoPlayer extends StatefulWidget {
     final Playable playable;
     final StronzPlayerController controller;
+    final StronzControllerState controllerState;
     final AdditionalStronzControlsBuilder? additionalControlsBuilder;
     final Widget Function(BuildContext)? controlsBuilder;
     final Widget Function(BuildContext)? videoBuilder;
@@ -25,6 +27,7 @@ class StronzVideoPlayer extends StatefulWidget {
         super.key,
         required this.playable,
         StronzPlayerController? controller,
+        this.controllerState = const StronzControllerState.autoPlay(),
         this.additionalControlsBuilder,
         this.controlsBuilder,
         this.videoBuilder,
@@ -53,9 +56,10 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
     late StronzPlayerController _playerController = super.widget.controller;
     AsyncMemoizer _controllerMemoizer = AsyncMemoizer();
     StreamSubscription? _titleSubscription;
+    late StronzControllerState _controllerState = super.widget.controllerState;
 
     Future<void> _initController() async {
-        await this._playerController.initialize(this._currentPlayable);
+        await this._playerController.initialize(this._currentPlayable, initialState: this._controllerState);
         await this._titleSubscription?.cancel();
         this._titleSubscription = this._playerController.stream.title.listen(
             (title) => this._currentPlayable = this._playerController.playable
@@ -72,6 +76,7 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
     @override
     Widget build(BuildContext context) {
         if(this._playerController.runtimeType != super.widget.controller.runtimeType) {
+            this._controllerState = this._playerController.state;
             this._playerController.dispose();
             this._playerController = super.widget.controller;
             this._controllerMemoizer = AsyncMemoizer();
@@ -97,7 +102,7 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
                                 ?? const VideoPlayerView(),
                                 
                                 super.widget.controlsBuilder?.call(context)
-                                ?? AdaptiveStronzVideoPlayerControls(
+                                ?? AdaptiveVideoPlayerControls(
                                     additionalControlsBuilder: super.widget.additionalControlsBuilder,
                                 )
                             ]

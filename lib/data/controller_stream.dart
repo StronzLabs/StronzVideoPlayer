@@ -1,7 +1,7 @@
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:video_player/video_player.dart';
 
-class StronzPlayerStream {
+class ControllerStream {
     final Stream<bool> buffering;
     final Stream<double> aspectRatio;
     final Stream<bool> playing;
@@ -15,7 +15,7 @@ class StronzPlayerStream {
     final Stream<List<DurationRange>> buffered;
     final Stream<String> title;
 
-    const StronzPlayerStream({
+    const ControllerStream({
         required this.buffering,
         required this.aspectRatio,
         required this.playing,

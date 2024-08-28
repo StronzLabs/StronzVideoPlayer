@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/data/playable.dart';
-import 'package:stronz_video_player/data/player_stream.dart';
+import 'package:stronz_video_player/data/controller_stream.dart';
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/media_session.dart';
 import 'package:video_player/video_player.dart';
@@ -115,7 +116,7 @@ abstract class StronzPlayerController {
     String get title => this.playable.title;
     final StreamController<String> _titleStreamController = StreamController<String>.broadcast();
 
-    StronzPlayerStream get stream => StronzPlayerStream(
+    ControllerStream get stream => ControllerStream(
         buffering: this._bufferingStreamController.stream,
         aspectRatio: this._aspectRatioStreamController.stream,
         playing: this._playingStreamController.stream,
@@ -130,8 +131,14 @@ abstract class StronzPlayerController {
         title: this._titleStreamController.stream,
     );
 
+    StronzControllerState get state => StronzControllerState(
+        playing: this.playing,
+        position: this.position,
+        volume: this.volume,
+    );
+
     @mustCallSuper
-    Future<void> initialize(Playable playable, {bool autoPlay = true}) async {
+    Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
         this._playable = playable;
 
         await MediaSession.start(this.title, this._playable.thumbnail, (event) => switch (event) {
