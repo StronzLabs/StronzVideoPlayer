@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
-// import 'package:video_player/video_player.dart';
+import 'package:video_player/video_player.dart';
 
 class SeekBar extends StatefulWidget {
     final void Function()? onSeekStart;
@@ -27,7 +27,7 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
 
     late Duration _position = super.controller(super.context).position;
     late Duration _duration = super.controller(super.context).duration;
-    // late List<DurationRange> _buffer = StronzPlayerController.of(context).buffered;
+    late List<DurationRange> _buffered = super.controller(super.context).buffered;
 
     final List<StreamSubscription> _subscriptions = [];
 
@@ -51,10 +51,9 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
                 super.controller(super.context).stream.duration.listen(
                     (event) => this.setState(() => this._duration = event)
                 ),
-                // TODO: buffer
-                // StronzPlayerController.of(context).stream.buffered.listen(
-                //     (event) => this.setState(() => this._buffer = event)
-                // ),
+                super.controller(super.context).stream.buffered.listen(
+                    (event) => this.setState(() => this._buffered = event)
+                ),
             ]);
     }
 
@@ -156,11 +155,17 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
                                                     width: constraints.maxWidth * this._slider,
                                                     color: const Color(0x3DFFFFFF),
                                                 ),
-                                                // for (DurationRange range in this._buffer)
-                                                //     Container(
-                                                //         width: constraints.maxWidth * (range.end.inMilliseconds / this._duration.inMilliseconds),
-                                                //         color: const Color(0x3DFFFFFF),
-                                                //     ),
+                                                for (DurationRange bufferRange in this._buffered)
+                                                    Transform.translate(
+                                                        offset: Offset(
+                                                            constraints.maxWidth * (bufferRange.start.inMilliseconds / this._duration.inMilliseconds),
+                                                            0.0,
+                                                        ),
+                                                        child: Container(
+                                                            width: constraints.maxWidth * (bufferRange.end.inMilliseconds / this._duration.inMilliseconds),
+                                                            color: const Color(0x3DFFFFFF)
+                                                        ),
+                                                    ),
                                                 Container(
                                                     width: this._click
                                                         ? constraints.maxWidth * this._slider
