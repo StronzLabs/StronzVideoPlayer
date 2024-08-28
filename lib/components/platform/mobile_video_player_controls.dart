@@ -12,18 +12,18 @@ import 'package:stronz_video_player/components/controls/volume_button.dart';
 import 'package:stronz_video_player/components/video_player_controls.dart';
 
 
-class MobileVideoControls extends VideoPlayerControls {
+class MobileVideoPlayerControls extends VideoPlayerControls {
 
-    const MobileVideoControls({
+    const MobileVideoPlayerControls({
         super.key,
         super.additionalControlsBuilder
     });
 
     @override
-    VideoPlayerControlsState<MobileVideoControls> createState() => _MobileVideoControlsState();
+    VideoPlayerControlsState<MobileVideoPlayerControls> createState() => _MobileVideoPlayerControlsState();
 }
 
-class _MobileVideoControlsState  extends VideoPlayerControlsState<MobileVideoControls> with StronzPlayerControl {
+class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVideoPlayerControls> with StronzPlayerControl {
 
     @override
     Widget buildTopBar(BuildContext context) {
