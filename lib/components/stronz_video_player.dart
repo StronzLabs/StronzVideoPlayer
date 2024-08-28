@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,8 @@ import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:sutils/sutils.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
-import 'package:window_manager/window_manager.dart';
 
 class StronzVideoPlayer extends StatefulWidget {
     final Playable playable;
@@ -38,12 +37,11 @@ class StronzVideoPlayer extends StatefulWidget {
     State<StronzVideoPlayer> createState() => _StronzVideoPlayerState();
 
     static Future<void> initialize() async {
+        await SUtils.ensureInitialized();
         VideoPlayerMediaKit.ensureInitialized(
             windows: true,
             linux: true,
         );
-        if(Platform.isWindows || Platform.isLinux || Platform.isMacOS)
-            await windowManager.ensureInitialized();
     }
 }
 
