@@ -23,10 +23,10 @@ class NativePlayerController extends StronzPlayerController {
     Future<File> _generateHLSFile() async {
         String hls = "#EXTM3U\n";
         if(this.audioTrack != null)
-            hls += '#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",URI="${this.audioTrack!.uri.toString()}"\n';
+            hls += '#EXT-X-MEDIA:TYPE=AUDIO,NAME="${this.audioTrack!.language}",GROUP-ID="audio",URI="${this.audioTrack!.uri.toString()}"\n';
         if(this.captionTrack != null)
-            hls += '#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",URI="${this.captionTrack!.uri.toString()}"\n';
-        hls += '#EXT-X-STREAM-INF:AUDIO="audio",SUBTITLES="subs"\n${this.videoTrack!.uri.toString()}';
+            hls += '#EXT-X-MEDIA:TYPE=SUBTITLES,NAME="${this.captionTrack!.language}",GROUP-ID="subs",URI="${this.captionTrack!.uri.toString()}"\n';
+        hls += '#EXT-X-STREAM-INF:BANDWIDTH=${this.videoTrack!.bandwidth},AUDIO="audio",SUBTITLES="subs"\n${this.videoTrack!.uri.toString()}';
         
         Directory tempDir = await getTemporaryDirectory();
         File tempHls = File("${tempDir.path}/stronz_video_player.m3u8");

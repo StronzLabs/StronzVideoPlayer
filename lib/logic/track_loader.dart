@@ -31,7 +31,8 @@ class MP4TrackLoader extends TrackLoader {
         return Future.value(MP4Tracks(
             video: VideoTrack(
                 uri: super.source,
-                quality: 0
+                quality: 0,
+                bandwidth: 0
             )
         ));
     }
@@ -58,7 +59,8 @@ class HLSTrackLoader extends TrackLoader {
             for (Variant variant in playlist.variants)
                 VideoTrack(
                     uri: variant.url,
-                    quality: deduceVariantResolution(variant)
+                    quality: deduceVariantResolution(variant),
+                    bandwidth: variant.format.bitrate!
                 )
         ];
 

@@ -8,10 +8,12 @@ abstract class Track {
 
 class VideoTrack extends Track {
     final int quality;
+    final int bandwidth;
 
     const VideoTrack({
         required super.uri,
-        required this.quality
+        required this.quality,
+        required this.bandwidth
     });
 }
 
