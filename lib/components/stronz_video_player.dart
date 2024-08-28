@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
+import 'package:stronz_video_player/components/platform/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';

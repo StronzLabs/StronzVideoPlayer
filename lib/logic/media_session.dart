@@ -5,9 +5,9 @@ import 'dart:typed_data';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:smtc_windows/smtc_windows.dart';
-import 'package:stronz_video_player/logic/resources/simple_http.dart' as http;
 
 import 'package:image/image.dart' as img;
+import 'package:sutils/sutils.dart';
 
 enum MediaSessionEvent {
     play,
@@ -39,7 +39,7 @@ class _WindowsMediaSession extends _MediaSession {
         Uint8List thumbnailBytes;
 
         if (thumbnail.scheme == 'http' || thumbnail.scheme == 'https')
-            thumbnailBytes = await http.fetchResource(thumbnail);
+            thumbnailBytes = await HTTP.getRaw(thumbnail);
         else
             thumbnailBytes = File(thumbnail.toString()).readAsBytesSync();
 

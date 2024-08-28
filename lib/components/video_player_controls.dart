@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/adaptive_stronz_video_player_controls.dart';
+import 'package:stronz_video_player/components/platform/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/stream_listener.dart';
-import 'package:stronz_video_player/logic/fullscreen.dart';
+import 'package:sutils/sutils.dart';
 
 abstract class VideoPlayerControls extends StatefulWidget {
     final AdditionalStronzControlsBuilder? additionalControlsBuilder;
@@ -27,7 +27,7 @@ abstract class VideoPlayerControlsState<T extends VideoPlayerControls> extends S
 
     Widget _buildBuffering(BuildContext context) {
         return ValueListenableBuilder(
-            valueListenable: FullScreen.isFullScreenSync(),
+            valueListenable: FullScreen.notifier,
             builder: (context, isFullScreen, child) => IgnorePointer(
                 child: Padding(
                     padding:isFullScreen
@@ -134,7 +134,7 @@ abstract class VideoPlayerControlsState<T extends VideoPlayerControls> extends S
                             this._buildTopGradient(context),
                             this._buildBottomGradient(context),
                             ValueListenableBuilder(
-                                valueListenable: FullScreen.isFullScreenSync(),
+                                valueListenable: FullScreen.notifier,
                                 builder: (context, isFullScreen, child) => Padding(
                                     padding: isFullScreen
                                         ? MediaQuery.of(context).padding

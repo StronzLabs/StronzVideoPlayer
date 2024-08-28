@@ -1,6 +1,6 @@
 import 'package:flutter_hls_parser/flutter_hls_parser.dart';
 import 'package:stronz_video_player/data/tracks.dart';
-import 'package:stronz_video_player/logic/resources/resource_manager.dart';
+import 'package:sutils/sutils.dart';
 
 abstract class TrackLoader {
     final Uri source;
@@ -51,7 +51,7 @@ class HLSTrackLoader extends TrackLoader {
 
     @override
     Future<Tracks> loadTracks() async {
-        HlsPlaylist playlist = await HlsPlaylistParser.create().parseString(super.source, await ResourceManager.content(super.source));
+        HlsPlaylist playlist = await HlsPlaylistParser.create().parseString(super.source, await ResourceManager.fetch(super.source));
         if(playlist is! HlsMasterPlaylist)
             throw Exception("Not a master playlist");
 
