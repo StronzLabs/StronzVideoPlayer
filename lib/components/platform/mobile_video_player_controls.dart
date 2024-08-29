@@ -113,11 +113,18 @@ class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVi
     void initState() {
         super.initState();
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
+        SystemChrome.setPreferredOrientations([
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+        ]);
     }
 
     @override
     void dispose() {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp
+        ]);
         super.dispose();
     }
 
