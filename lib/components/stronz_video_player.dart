@@ -41,6 +41,7 @@ class StronzVideoPlayer extends StatefulWidget {
         VideoPlayerMediaKit.ensureInitialized(
             windows: true,
             linux: true,
+            android: EPlatform.isAndroidTV
         );
     }
 }

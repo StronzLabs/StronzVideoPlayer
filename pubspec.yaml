@@ -12,7 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   sutils:
-    git: https://github.com/StronzLabs/SUtils.git
+    path : C:\Users\bonfr\Desktop\sutils
+    # git: https://github.com/StronzLabs/SUtils.git
 
   async: ^2.11.0
   provider: ^6.1.2
@@ -32,6 +33,7 @@ dependencies:
   video_player: ^2.9.1
   video_player_media_kit: ^1.0.5
   media_kit_libs_windows_video: any
+  media_kit_libs_android_video: any
   media_kit_libs_linux: any
 
 dev_dependencies:
