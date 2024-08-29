@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   sutils:
-    git: https://github.com/StronzLabs/SUtils.git
+    path: C:\Users\bonfr\Desktop\sutils
 
   async: ^2.11.0
   provider: ^6.1.2
@@ -22,6 +22,7 @@ dependencies:
 
   image: ^4.2.0
   audio_service: ^0.18.15
+  audio_service_mpris: ^0.1.5
   smtc_windows:
     git:
       url: https://github.com/Bonfra04/smtc_windows.git
