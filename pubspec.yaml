@@ -12,8 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   sutils:
-    path : C:\Users\bonfr\Desktop\sutils
-    # git: https://github.com/StronzLabs/SUtils.git
+    git: https://github.com/StronzLabs/SUtils.git
 
   async: ^2.11.0
   provider: ^6.1.2
@@ -21,6 +20,7 @@ dependencies:
   flutter_hls_parser: ^2.0.1
   path_provider: ^2.1.4
 
+  wakelock_plus: ^1.2.8
   image: ^4.2.0
   audio_service: ^0.18.15
   audio_service_mpris: ^0.1.5

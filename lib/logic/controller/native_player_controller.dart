@@ -8,6 +8,7 @@ import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:stronz_video_player/logic/track_loader.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class NativePlayerController extends StronzPlayerController {
 
@@ -97,7 +98,8 @@ class NativePlayerController extends StronzPlayerController {
     @override
     Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
         await super.initialize(playable);
-        
+        await WakelockPlus.enable();
+
         Uri source = await this.playable.source;
         TrackLoader loader = await TrackLoader.create(source: source);
         this.tracks = await loader.loadTracks();
@@ -129,18 +131,21 @@ class NativePlayerController extends StronzPlayerController {
     @override
     Future<void> dispose() async {
         await this._disposeVideoPlayerController();
-        super.dispose();
+        await WakelockPlus.disable();
+        await super.dispose();
     }
 
     @override
     Future<void> play() async {
         await super.play();
+        await WakelockPlus.enable();
         await this.videoPlayerController.play();
     }
 
     @override
     Future<void> pause() async {
         await super.pause();
+        await WakelockPlus.disable();
         await this.videoPlayerController.pause();
     }
 
