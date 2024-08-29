@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   sutils:
-    path: C:\Users\bonfr\Desktop\sutils
+    git: https://github.com/StronzLabs/SUtils.git
 
   async: ^2.11.0
   provider: ^6.1.2
