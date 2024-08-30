@@ -46,7 +46,7 @@ class StronzVideoPlayer extends StatefulWidget {
     }
 }
 
-class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
+class _StronzVideoPlayerState extends State<StronzVideoPlayer> with WidgetsBindingObserver {
 
     late Playable _currentPlayable = super.widget.playable;
     late StronzPlayerController _playerController = super.widget.controller;
@@ -63,10 +63,24 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> {
     }
 
     @override
+    void initState() {
+        super.initState();
+        WidgetsBinding.instance.addObserver(this);
+    }
+
+    @override
     void dispose() {
         this._playerController.dispose();
         this._titleSubscription?.cancel();
+        WidgetsBinding.instance.removeObserver(this);
         super.dispose();
+    }
+
+    @override
+    void didChangeAppLifecycleState(AppLifecycleState state) {
+        if(state == AppLifecycleState.resumed)
+            return;
+        super.widget.onBeforeExit?.call(this._playerController);
     }
 
     @override
