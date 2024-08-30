@@ -10,6 +10,7 @@ import 'package:stronz_video_player/components/controls/settings_button.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/components/controls/volume_button.dart';
 import 'package:stronz_video_player/components/video_player_controls.dart';
+import 'package:sutils/sutils.dart';
 
 
 class MobileVideoPlayerControls extends VideoPlayerControls {
@@ -113,18 +114,20 @@ class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVi
     void initState() {
         super.initState();
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
-        SystemChrome.setPreferredOrientations([
-            DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
-        ]);
+        if(!EPlatform.isTablet)
+            SystemChrome.setPreferredOrientations([
+                DeviceOrientation.landscapeLeft,
+                DeviceOrientation.landscapeRight,
+            ]);
     }
 
     @override
     void dispose() {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-        SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp
-        ]);
+        if(!EPlatform.isTablet)
+            SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp
+            ]);
         super.dispose();
     }
 
