@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stronz_video_player/data/player_preferences.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/controller_stream.dart';
@@ -175,7 +176,12 @@ abstract class StronzPlayerController {
         await MediaSession.informPaused();
     }
 
-    Future<void> setVolume(double volume);
+    @mustCallSuper
+    Future<void> setVolume(double volume) async {
+        PlayerPreferences.volume = volume;
+        await PlayerPreferences.instance.serialize();
+    }
+
     Future<void> seekTo(Duration position);
     Future<void> setVideoTrack(VideoTrack? track);
     Future<void> setAudioTrack(AudioTrack? track);

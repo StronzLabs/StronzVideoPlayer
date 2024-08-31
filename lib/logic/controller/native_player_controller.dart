@@ -150,7 +150,11 @@ class NativePlayerController extends StronzPlayerController {
     }
 
     @override
-    Future<void> setVolume(double volume) => this.videoPlayerController.setVolume(volume);
+    Future<void> setVolume(double volume) async {
+        await super.setVolume(volume);
+        await this.videoPlayerController.setVolume(volume);
+    }
+
     @override
     Future<void> seekTo(Duration position) => this.videoPlayerController.seekTo(position);
 

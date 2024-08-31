@@ -26,12 +26,13 @@ class StronzVideoPlayer extends StatefulWidget {
         super.key,
         required this.playable,
         StronzPlayerController? controller,
-        this.controllerState = const StronzControllerState.autoPlay(),
+        StronzControllerState? controllerState,
         this.additionalControlsBuilder,
         this.controlsBuilder,
         this.videoBuilder,
         this.onBeforeExit
-    }) : this.controller = controller ?? NativePlayerController();
+    }) : this.controller = controller ?? NativePlayerController(),
+        this.controllerState = controllerState ?? StronzControllerState.autoPlay();
 
     @override
     State<StronzVideoPlayer> createState() => _StronzVideoPlayerState();
