@@ -31,10 +31,7 @@ dependencies:
       ref: main
 
   video_player: ^2.9.1
-  video_player_media_kit: ^1.0.5
-  media_kit_libs_windows_video: any
-  media_kit_libs_android_video: any
-  media_kit_libs_linux: any
+  fvp: ^0.26.0
 
 dev_dependencies:
   flutter_test:
