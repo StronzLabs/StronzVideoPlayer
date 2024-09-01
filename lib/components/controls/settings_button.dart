@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/data/player_preferences.dart';
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 
@@ -159,7 +160,11 @@ class _SettingsMenuState extends State<_SettingsMenu> {
                 const Divider(),
                 for (VideoTrack track in tracks)
                     this._buildOptionButton("${track.quality}p", track == super.widget.controller.videoTrack,
-                        () => super.widget.controller.setVideoTrack(track)
+                        () {
+                            super.widget.controller.setVideoTrack(track);
+                            PlayerPreferences.videoTrack = track.quality;
+                            PlayerPreferences.instance.serialize();
+                        }
                     )
             ]
         );
@@ -175,7 +180,11 @@ class _SettingsMenuState extends State<_SettingsMenu> {
                 const Divider(),
                 for (AudioTrack track in tracks)
                     this._buildOptionButton(track.language, track == super.widget.controller.audioTrack,
-                        () => super.widget.controller.setAudioTrack(track),
+                        () {
+                            super.widget.controller.setAudioTrack(track);
+                            PlayerPreferences.audioTrack = track.language;
+                            PlayerPreferences.instance.serialize();
+                        } 
                     ),
             ],
         );
@@ -191,10 +200,18 @@ class _SettingsMenuState extends State<_SettingsMenu> {
                 const Divider(),
                 for (CaptionTrack track in tracks)
                     this._buildOptionButton(track.language, track == super.widget.controller.captionTrack,
-                        () => super.widget.controller.setCaptionTrack(track),
+                        () {
+                            super.widget.controller.setCaptionTrack(track);
+                            PlayerPreferences.captionTrack = track.language;
+                            PlayerPreferences.instance.serialize();
+                        }
                     ),
                 this._buildOptionButton("Nessuno", null == super.widget.controller.captionTrack,
-                    () => super.widget.controller.setCaptionTrack(null),
+                    () {
+                        super.widget.controller.setCaptionTrack(null);
+                        PlayerPreferences.captionTrack = "Nessuno";
+                        PlayerPreferences.instance.serialize();
+                    }
                 )
             ]
         );

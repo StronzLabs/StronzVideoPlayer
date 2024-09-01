@@ -7,13 +7,15 @@ import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/controller_stream.dart';
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/media_session.dart';
+import 'package:stronz_video_player/logic/track_loader.dart';
+import 'package:sutils/sutils.dart';
 import 'package:video_player/video_player.dart';
 
 abstract class StronzPlayerController {
     late Playable _playable;
     Playable get playable => this._playable;
 
-    Tracks get tracks;
+    Tracks tracks = const EmptyTracks();
 
     bool _buffering = true;
     bool get buffering => this._buffering;
@@ -138,6 +140,34 @@ abstract class StronzPlayerController {
         volume: this.volume,
     );
 
+    Future<void> _loadTracks(StronzControllerState? initialState) async {
+        Uri source = await this.playable.source;
+        TrackLoader loader = await TrackLoader.create(source: source);
+        this.tracks = await loader.loadTracks();
+
+        if (this.tracks is MP4Tracks) {
+            MP4Tracks tracks = this.tracks as MP4Tracks;
+            this.videoTrack = tracks.video;
+            this.audioTrack = null;
+            this.captionTrack = null;
+        }
+        else if(this.tracks is HLSTracks) {
+            HLSTracks tracks = this.tracks as HLSTracks;
+            this.videoTrack = tracks.video.firstWhere(
+                (element) => element.quality == (initialState?.videoTrack ?? PlayerPreferences.videoTrack),
+                orElse: () => tracks.video.reduce((a, b) => a.quality > b.quality ? a : b)
+            );
+            this.audioTrack = tracks.audio.firstWhereOrNull(
+                (element) => element.language == (initialState?.audioTrack ?? PlayerPreferences.audioTrack),
+            ) ?? tracks.audio.firstOrNull;
+            this.captionTrack = tracks.caption.firstWhereOrNull(
+                (element) => element.language == (initialState?.captionTrack ?? PlayerPreferences.captionTrack)
+            );
+
+        } else 
+            throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
+    }
+
     @mustCallSuper
     Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
         this._playable = playable;
@@ -146,6 +176,8 @@ abstract class StronzPlayerController {
             MediaSessionEvent.play => this.play(),
             MediaSessionEvent.pause => this.pause(),
         });
+
+        await this._loadTracks(initialState);
     }
 
     @mustCallSuper

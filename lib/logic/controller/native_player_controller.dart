@@ -6,14 +6,10 @@ import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
-import 'package:stronz_video_player/logic/track_loader.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class NativePlayerController extends StronzPlayerController {
-
-    @override
-    Tracks tracks = const EmptyTracks();
 
     VideoPlayerController? _videoPlayerController;
     final StreamController<VideoPlayerController?> _videoPlayerControllerController = StreamController<VideoPlayerController?>.broadcast();
@@ -79,31 +75,10 @@ class NativePlayerController extends StronzPlayerController {
         newController.addListener(bufferingListener);
     }
 
-    void _autoSelectTracks() {
-        if(this.tracks is HLSTracks) {
-            HLSTracks tracks = this.tracks as HLSTracks;
-            super.videoTrack = tracks.video.firstOrNull;
-            super.audioTrack = tracks.audio.firstOrNull;
-            super.captionTrack = tracks.caption.firstOrNull;
-
-        } else if (this.tracks is MP4Tracks) {
-            MP4Tracks tracks = this.tracks as MP4Tracks;
-            super.videoTrack = tracks.video;
-            super.audioTrack = null;
-            super.captionTrack = null;
-        } else
-            throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
-    }
-
     @override
     Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
         await super.initialize(playable);
         await WakelockPlus.enable();
-
-        Uri source = await this.playable.source;
-        TrackLoader loader = await TrackLoader.create(source: source);
-        this.tracks = await loader.loadTracks();
-        this._autoSelectTracks();
 
         this._videoPlayerController = await this._prepareVideoPlayerController();
             

@@ -83,7 +83,8 @@ class HLSTrackLoader extends TrackLoader {
         return HLSTracks(
             video: video,
             audio: audio,
-            caption: caption
+            caption: caption,
+            masterSource: super.source
         );
     }
 }

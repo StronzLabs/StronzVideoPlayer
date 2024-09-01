@@ -36,6 +36,7 @@ class CaptionTrack extends Track {
 }
 
 abstract class Tracks {
+    Uri get masterSource;
     bool get hasVideoTrackOptions;
     bool get hasAudioTrackOptions;
     bool get hasCaptionsTrackOptions;
@@ -46,6 +47,8 @@ abstract class Tracks {
 }
 
 class EmptyTracks extends Tracks {
+    @override
+    Uri get masterSource => Uri.parse('');
     @override
     bool get hasVideoTrackOptions => false;
     @override
@@ -62,6 +65,8 @@ class HLSTracks extends Tracks {
     final List<CaptionTrack> caption;
 
     @override
+    final Uri masterSource;
+    @override
     bool get hasVideoTrackOptions => this.video.length > 1;
     @override
     bool get hasAudioTrackOptions => this.audio.length > 1;
@@ -71,12 +76,14 @@ class HLSTracks extends Tracks {
     const HLSTracks({
         required this.video,
         required this.audio,
-        required this.caption
+        required this.caption,
+        required this.masterSource
     });
 }
 
 class MP4Tracks extends Tracks {
     final VideoTrack video;
+    Uri get masterSource => this.video.uri;
 
     @override
     bool get hasVideoTrackOptions => false;

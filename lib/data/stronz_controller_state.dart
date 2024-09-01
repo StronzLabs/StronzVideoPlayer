@@ -4,12 +4,21 @@ class StronzControllerState {
     final bool? playing;
     final Duration? position;
     final double? volume;
+    final int? videoTrack;
+    final String? audioTrack;
+    final String? captionTrack;
 
     StronzControllerState({
         this.playing,
         this.position,
-        double? volume
-    }) : this.volume = volume ?? PlayerPreferences.volume;
+        double? volume,
+        int? videoTrack,
+        String? audioTrack,
+        String? captionTrack
+    }) : this.volume = volume ?? PlayerPreferences.volume,
+        this.videoTrack = videoTrack ?? PlayerPreferences.videoTrack,
+        this.audioTrack = audioTrack ?? PlayerPreferences.audioTrack,
+        this.captionTrack = captionTrack ?? PlayerPreferences.captionTrack;
 
     StronzControllerState.autoPlay({
         Duration? position,
