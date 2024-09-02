@@ -126,43 +126,43 @@ class _DesktopVideoControlsState extends VideoPlayerControlsState<DesktopVideoPl
         return CallbackShortcuts(
             bindings: {
                 const SingleActivator(LogicalKeyboardKey.mediaPlay): () =>
-                    super.controller(context).play(),
+                    super.controller(context, listen: false).play(),
                 const SingleActivator(LogicalKeyboardKey.mediaPause): () =>
-                    super.controller(context).pause(),
+                    super.controller(context, listen: false).pause(),
                 const SingleActivator(LogicalKeyboardKey.mediaPlayPause): () =>
-                    super.controller(context).playOrPause(),
+                    super.controller(context, listen: false).playOrPause(),
                 const SingleActivator(LogicalKeyboardKey.space): () =>
-                    super.controller(context).playOrPause(),
+                    super.controller(context, listen: false).playOrPause(),
                 const SingleActivator(LogicalKeyboardKey.keyJ): () {
-                    final rate = super.controller(context).position - const Duration(seconds: 10);
-                    super.controller(context).seekTo(rate);
+                    final rate = super.controller(context, listen: false).position - const Duration(seconds: 10);
+                    super.controller(context, listen: false).seekTo(rate);
                 },
                 const SingleActivator(LogicalKeyboardKey.keyI): () {
-                    final rate = super.controller(context).position + const Duration(seconds: 10);
-                    super.controller(context).seekTo(rate);
+                    final rate = super.controller(context, listen: false).position + const Duration(seconds: 10);
+                    super.controller(context, listen: false).seekTo(rate);
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
-                    final rate = super.controller(context).position - const Duration(seconds: 5);
-                    super.controller(context).seekTo(rate);
+                    final rate = super.controller(context, listen: false).position - const Duration(seconds: 5);
+                    super.controller(context, listen: false).seekTo(rate);
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowRight): () {
-                    final rate = super.controller(context).position + const Duration(seconds: 5);
-                   super.controller(context).seekTo(rate);
+                    final rate = super.controller(context, listen: false).position + const Duration(seconds: 5);
+                   super.controller(context, listen: false).seekTo(rate);
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowUp): () {
-                    final volume = super.controller(context).volume + 5.0;
-                    super.controller(context).setVolume(volume.clamp(0.0, 100.0));
+                    final volume = super.controller(context, listen: false).volume + 5.0;
+                    super.controller(context, listen: false).setVolume(volume.clamp(0.0, 100.0));
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowDown): () {
-                    final volume = super.controller(context).volume - 5.0;
-                    super.controller(context).setVolume(volume.clamp(0.0, 100.0));
+                    final volume = super.controller(context, listen: false).volume - 5.0;
+                    super.controller(context, listen: false).setVolume(volume.clamp(0.0, 100.0));
                 },
                 const SingleActivator(LogicalKeyboardKey.keyM): () {
-                    if(super.controller(context).volume > 0.0) {
-                        this._savedVolume = super.controller(context).volume;
-                        super.controller(context).setVolume(0.0);
+                    if(super.controller(context, listen: false).volume > 0.0) {
+                        this._savedVolume = super.controller(context, listen: false).volume;
+                        super.controller(context, listen: false).setVolume(0.0);
                     } else
-                        super.controller(context).setVolume(this._savedVolume);
+                        super.controller(context, listen: false).setVolume(this._savedVolume);
                 },
                 const SingleActivator(LogicalKeyboardKey.keyF): () => FullScreen.toggle(),
                 const SingleActivator(LogicalKeyboardKey.escape): () => FullScreen.set(false),
