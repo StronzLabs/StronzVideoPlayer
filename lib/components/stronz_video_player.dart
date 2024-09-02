@@ -44,6 +44,7 @@ class StronzVideoPlayer extends StatefulWidget {
         fvp.registerWith(options: {'platforms': [
             'windows',
             'linux',
+            'macos',
             if(EPlatform.isAndroidTV)
                 'android'
         ]});
