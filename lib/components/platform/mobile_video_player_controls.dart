@@ -26,6 +26,8 @@ class MobileVideoPlayerControls extends VideoPlayerControls {
 
 class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVideoPlayerControls> with StronzPlayerControl {
 
+    late Offset _tapPosition;
+
     @override
     Widget buildTopBar(BuildContext context) {
         return Container(
@@ -44,16 +46,10 @@ class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVi
 
     @override
     Widget buildPrimaryBar(BuildContext context) {
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-                // TODO: double tap the screen to seek 10 seconds back
-                if(super.mount)
-                    const PlayPauseButton(
-                        iconSize: 50,
-                    ),
-                // TODO: double tap the screen to seek 10 seconds forward
-            ]
+        return const Center(
+            child: PlayPauseButton(
+                iconSize: 50,
+            )
         );
     }
 
@@ -104,6 +100,9 @@ class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVi
                 autofocus: true,
                 child: GestureDetector(
                     onTap: this._onTap,
+                    onDoubleTap: () => this._onDoubleTap(context),
+                    onTapDown: (details) => this._tapPosition = details.localPosition,
+                    onDoubleTapDown: (details) => this._tapPosition = details.localPosition,
                     child: super.buildControls(context),
                 )
             )
@@ -141,6 +140,22 @@ class _MobileVideoPlayerControlsState  extends VideoPlayerControlsState<MobileVi
                 super.mount = true;
                 super.visible = true;
             });
+        }
+    }
+
+    void _onDoubleTap(BuildContext context) {
+        double width = (context.findRenderObject() as RenderBox).paintBounds.width;
+        double leftBound = 0.33, rightBound = 0.67;
+        double tap = this._tapPosition.dx / width;
+
+        Duration? delta;
+        if(tap <= leftBound)
+            delta = const Duration(seconds: -10);
+        else if(tap >= rightBound)
+            delta = const Duration(seconds: 10);
+        if(delta != null) {
+            controller(context, listen: false).seekTo(controller(context, listen: false).position + delta);
+            super.restartTimer();
         }
     }
 }
