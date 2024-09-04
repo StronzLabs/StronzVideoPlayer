@@ -159,7 +159,7 @@ class NativePlayerController extends StronzPlayerController {
 
         await this._disposeVideoPlayerController();
         await super.switchTo(playable);
-        await this.initialize(playable);
+        await this.initialize(playable, initialState: StronzControllerState.autoPlay());
         
         super.buffering = false;
     }
