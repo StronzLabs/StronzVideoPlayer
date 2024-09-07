@@ -36,12 +36,7 @@ class _WindowsMediaSession extends _MediaSession {
     SMTCWindows? _smtc;
 
     Future<Uint8List> fetchThumbnail(Uri thumbnail) async {
-        Uint8List thumbnailBytes;
-
-        if (thumbnail.scheme == 'http' || thumbnail.scheme == 'https')
-            thumbnailBytes = await HTTP.getRaw(thumbnail);
-        else
-            thumbnailBytes = File(thumbnail.toString()).readAsBytesSync();
+        Uint8List thumbnailBytes = await ResourceManager.fetchRaw(thumbnail);
 
         img.Image? image = img.decodeImage(thumbnailBytes);
         if (image != null)
