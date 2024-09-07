@@ -70,6 +70,8 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
             this._hover = true;
             this._slider = percent.clamp(0.0, 1.0);
         });
+        Duration target = this._duration * this._slider;
+        super.controller(super.context, listen: false).seekTo(target).then((value) => this._seeking = false);
     }
 
     void _onPointerDown() {
