@@ -10,6 +10,7 @@ import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/player_preferences.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
+import 'package:stronz_video_player/logic/controller/stronz_external_controller.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/sutils.dart';
 
@@ -32,7 +33,7 @@ class StronzVideoPlayer extends StatefulWidget {
         this.controlsBuilder,
         this.videoBuilder,
         this.onBeforeExit
-    }) : this.controller = controller ?? NativePlayerController(),
+    }) : this.controller = controller ?? NativePlayerController([MediaSessionExternalController()]),
         this.controllerState = controllerState ?? StronzControllerState.autoPlay();
 
     @override
