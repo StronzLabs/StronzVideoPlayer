@@ -11,8 +11,11 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 class NativePlayerController extends StronzPlayerController {
 
+    NativePlayerController(super.externalControllers);
+    
     VideoPlayerController? _videoPlayerController;
     final StreamController<VideoPlayerController?> _videoPlayerControllerController = StreamController<VideoPlayerController?>.broadcast();
+
     Stream<VideoPlayerController?> get videoPlayerControllerStream => this._videoPlayerControllerController.stream;
     VideoPlayerController? get videoPlayerControllerOrNull => this._videoPlayerController;
     VideoPlayerController get videoPlayerController => this._videoPlayerController!;
@@ -80,12 +83,7 @@ class NativePlayerController extends StronzPlayerController {
         await super.initialize(playable);
         await WakelockPlus.enable();
 
-        this._videoPlayerController = await this._prepareVideoPlayerController();
-            
-        this._videoPlayerControllerController.add(this.videoPlayerController);
-        this.videoPlayerController.addListener(this._onVideoPlayerControllerEvent);
-        await this.videoPlayerController.initialize();
-        this._videoPlayerControllerController.add(this.videoPlayerController);
+        await this._initializeVideoPlayerController();
 
         if(initialState == null)
             return;
@@ -95,6 +93,15 @@ class NativePlayerController extends StronzPlayerController {
             await this.seekTo(initialState.position!);
         if(initialState.volume != null)
             await this.setVolume(initialState.volume!);
+    }
+
+    Future<void> _initializeVideoPlayerController() async {
+        this._videoPlayerController = await this._prepareVideoPlayerController();
+
+        this._videoPlayerControllerController.add(this.videoPlayerController);
+        this.videoPlayerController.addListener(this._onVideoPlayerControllerEvent);
+        await this.videoPlayerController.initialize();
+        this._videoPlayerControllerController.add(this.videoPlayerController);
     }
 
     Future<void> _disposeVideoPlayerController() async {
@@ -112,14 +119,12 @@ class NativePlayerController extends StronzPlayerController {
 
     @override
     Future<void> play() async {
-        await super.play();
         await WakelockPlus.enable();
         await this.videoPlayerController.play();
     }
 
     @override
     Future<void> pause() async {
-        await super.pause();
         await WakelockPlus.disable();
         await this.videoPlayerController.pause();
     }
@@ -159,7 +164,8 @@ class NativePlayerController extends StronzPlayerController {
 
         await this._disposeVideoPlayerController();
         await super.switchTo(playable);
-        await this.initialize(playable, initialState: StronzControllerState.autoPlay());
+        await this._initializeVideoPlayerController();
+        await this.play();
         
         super.buffering = false;
     }
