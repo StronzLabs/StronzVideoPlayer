@@ -22,10 +22,12 @@ class MediaSession {
     static Future<void> stop() => MediaSession._instance.stop();
     static Future<void> informPaused() => MediaSession._instance.informPaused();
     static Future<void> informPlaying() => MediaSession._instance.informPlaying();
+    static Future<void> switchTo(String title, Uri thumbnail) => MediaSession._instance.switchTo(title, thumbnail);
 }
 
 abstract class _MediaSession {
     Future<void> start(String title, Uri thumbnail, void Function(MediaSessionEvent) handler);
+    Future<void> switchTo(String title, Uri thumbnail);
     Future<void> stop();
     Future<void> informPaused();
     Future<void> informPlaying();
@@ -81,6 +83,15 @@ class _WindowsMediaSession extends _MediaSession {
     }
 
     @override
+    Future<void> switchTo(String title, Uri thumbnail) async {
+        return this._smtc!.updateMetadata(MusicMetadata(
+            title: title,
+            albumArtist: 'StronzVideoPlayer',
+            thumbnailStream: await fetchThumbnail(thumbnail)
+        ));
+    }
+
+    @override
     Future<void> stop() async {
         await this._smtc?.disableSmtc();
         await this._smtc?.dispose();
@@ -112,6 +123,13 @@ class _OtherMediaSession extends _MediaSession {
             )
         );
 
+        await this._audioHandler!.start(title, thumbnail, handler);
+    }
+
+    @override
+    Future<void> switchTo(String title, Uri thumbnail) async {
+        void Function(MediaSessionEvent) handler = this._audioHandler!._handler!;
+        await this._audioHandler!.stop();
         await this._audioHandler!.start(title, thumbnail, handler);
     }
 
