@@ -9,8 +9,8 @@ import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/player_preferences.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
+import 'package:stronz_video_player/logic/controller/media_session_external_controller.dart';
 import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
-import 'package:stronz_video_player/logic/controller/stronz_external_controller.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/sutils.dart';
 
