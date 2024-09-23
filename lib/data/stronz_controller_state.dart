@@ -22,10 +22,16 @@ class StronzControllerState {
 
     StronzControllerState.autoPlay({
         Duration? position,
-        double? volume
+        double? volume,
+        int? videoTrack,
+        String? audioTrack,
+        String? captionTrack
     }) : this(
         playing: true,
         position: position,
-        volume: volume
+        volume: volume,
+        videoTrack: videoTrack,
+        audioTrack: audioTrack,
+        captionTrack: captionTrack
     );
 }
