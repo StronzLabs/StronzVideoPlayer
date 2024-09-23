@@ -120,23 +120,25 @@ class NativePlayerController extends StronzPlayerController {
     @override
     Future<void> play() async {
         await WakelockPlus.enable();
-        await this.videoPlayerController.play();
+        await this._videoPlayerController?.play();
     }
 
     @override
     Future<void> pause() async {
         await WakelockPlus.disable();
-        await this.videoPlayerController.pause();
+        await this._videoPlayerController?.pause();
     }
 
     @override
     Future<void> setVolume(double volume) async {
         await super.setVolume(volume);
-        await this.videoPlayerController.setVolume(volume);
+        await this._videoPlayerController?.setVolume(volume);
     }
 
     @override
-    Future<void> seekTo(Duration position) => this.videoPlayerController.seekTo(position);
+    Future<void> seekTo(Duration position) async {
+        await this._videoPlayerController?.seekTo(position);
+    }
 
     @override
     Future<void> setVideoTrack(VideoTrack? track) async {
