@@ -224,11 +224,10 @@ abstract class StronzPlayerController {
         this._playable = playable;
 
         for (StronzExternalController controller in this.externalControllers) {
-            await controller.initialize((event) => switch (event) {
+            await controller.initialize(this._playable, (event) => switch (event) {
                 StronzExternalControllerEvent.play => this.play(),
                 StronzExternalControllerEvent.pause => this.pause(),
             });
-            await controller.start(this._playable);
         }
 
         await this._loadTracks(initialState);
