@@ -34,4 +34,22 @@ class StronzControllerState {
         audioTrack: audioTrack,
         captionTrack: captionTrack
     );
+
+    StronzControllerState copyWith({
+        bool? playing,
+        Duration? position,
+        double? volume,
+        int? videoTrack,
+        String? audioTrack,
+        String? captionTrack
+    }) {
+        return StronzControllerState(
+            playing: playing ?? this.playing,
+            position: position ?? this.position,
+            volume: volume ?? this.volume,
+            videoTrack: videoTrack ?? this.videoTrack,
+            audioTrack: audioTrack ?? this.audioTrack,
+            captionTrack: captionTrack ?? this.captionTrack
+        );
+    }
 }
