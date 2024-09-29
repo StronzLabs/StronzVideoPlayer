@@ -175,7 +175,7 @@ class NativePlayerController extends StronzPlayerController {
     void _onVideoPlayerControllerEvent() {
         super.buffering = this.videoPlayerController.value.isBuffering;
         super.aspectRatio = this.videoPlayerController.value.aspectRatio;
-        super.playing = this.videoPlayerController.value.isPlaying;
+        super.playing = this.videoPlayerController.value.isPlaying && !this.videoPlayerController.value.isBuffering;
         super.position = this.videoPlayerController.value.position;
         super.volume = this.videoPlayerController.value.volume;
         super.duration = this.videoPlayerController.value.duration;
