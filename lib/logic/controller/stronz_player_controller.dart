@@ -28,7 +28,6 @@ abstract class StronzPlayerController {
     set buffering(bool buffering) {
         if(this._buffering != buffering) {
             this._bufferingStreamController.add(this._buffering = buffering);
-            this._buffering = buffering;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -41,7 +40,6 @@ abstract class StronzPlayerController {
     set aspectRatio(double aspectRatio) {
         if(this._aspectRatio != aspectRatio) {
             this._aspectRatioStreamController.add(this._aspectRatio = aspectRatio);
-            this._aspectRatio = aspectRatio;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -54,7 +52,6 @@ abstract class StronzPlayerController {
     set playing(bool playing) {
         if(this._playing != playing) {
             this._playingStreamController.add(this._playing = playing);
-            this._playing = playing;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -67,7 +64,6 @@ abstract class StronzPlayerController {
     set position(Duration position) {
         if(this._position != position) {
             this._positionStreamController.add(this._position = position);
-            this._position = position;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -80,7 +76,6 @@ abstract class StronzPlayerController {
     set volume(double volume) {
         if(this._volume != volume) {
             this._volumeStreamController.add(this._volume = volume);
-            this._volume = volume;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -93,7 +88,6 @@ abstract class StronzPlayerController {
     set duration(Duration duration) {
         if(this._duration != duration) {
             this._durationStreamController.add(this._duration = duration);
-            this._duration = duration;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -106,7 +100,6 @@ abstract class StronzPlayerController {
     set completed(bool completed) {
         if(this._completed != completed) {
             this._completedStreamController.add(this._completed = completed);
-            this._completed = completed;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -119,7 +112,6 @@ abstract class StronzPlayerController {
     set videoTrack(VideoTrack? videoTrack) {
         if(this._videoTrack != videoTrack) {
             this._videoTrackStreamController.add(this._videoTrack = videoTrack);
-            this._videoTrack = videoTrack;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -132,7 +124,6 @@ abstract class StronzPlayerController {
     set audioTrack(AudioTrack? audioTrack) {
         if(this._audioTrack != audioTrack) {
             this._audioTrackStreamController.add(this._audioTrack = audioTrack);
-            this._audioTrack = audioTrack;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -145,7 +136,6 @@ abstract class StronzPlayerController {
     set captionTrack(CaptionTrack? captionTrack) {
         if(this._captionTrack != captionTrack) {
             this._captionTrackStreamController.add(this._captionTrack = captionTrack);
-            this._captionTrack = captionTrack;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
@@ -158,7 +148,6 @@ abstract class StronzPlayerController {
     set buffered(List<DurationRange> buffered) {
         if(this._buffered != buffered) {
             this._bufferedStreamController.add(this._buffered = buffered);
-            this._buffered = buffered;
             for (StronzExternalController controller in this.externalControllers)
                 controller.informState(this.state);
         }
