@@ -264,6 +264,7 @@ abstract class StronzPlayerController {
     @mustCallSuper
     Future<void> switchTo(Playable playable) async {
         this._playable = playable;
+        await this._loadTracks(this.state);
         this._titleStreamController.add(this.playable.title);
         
         for (StronzExternalController controller in this.externalControllers)
