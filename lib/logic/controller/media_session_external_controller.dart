@@ -6,7 +6,7 @@ import 'package:stronz_video_player/logic/media_session.dart';
 class MediaSessionExternalController extends StronzExternalController {
     
     @override
-    Future<void> initialize(Playable playable, void Function(StronzExternalControllerEvent) handler) async {
+    Future<void> initialize(Playable playable, void Function(StronzExternalControllerEvent event, {dynamic arg}) handler) async {
         await MediaSession.start(playable.title, playable.thumbnail, (event) => switch (event) {
             MediaSessionEvent.play => handler(StronzExternalControllerEvent.play),
             MediaSessionEvent.pause => handler(StronzExternalControllerEvent.pause),
@@ -25,6 +25,9 @@ class MediaSessionExternalController extends StronzExternalController {
         else if (state.playing == false)
             await MediaSession.informPaused();
     }
+
+    @override
+    Future<void> onEvent(StronzExternalControllerEvent event, {dynamic arg}) async {}
 
     @override
     Future<void> switchTo(Playable playable) {

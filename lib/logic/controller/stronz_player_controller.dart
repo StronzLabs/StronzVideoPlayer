@@ -213,9 +213,10 @@ abstract class StronzPlayerController {
         this._playable = playable;
 
         for (StronzExternalController controller in this.externalControllers) {
-            await controller.initialize(this._playable, (event) => switch (event) {
+            await controller.initialize(this._playable, (event, {arg}) => switch (event) {
                 StronzExternalControllerEvent.play => this.play(),
                 StronzExternalControllerEvent.pause => this.pause(),
+                StronzExternalControllerEvent.seekTo => this.seekTo(arg),
             });
         }
 
@@ -241,15 +242,30 @@ abstract class StronzPlayerController {
             await controller.dispose();
     }
 
-    Future<void> play();
-    Future<void> pause();
+    @mustCallSuper
+    Future<void> play() async {
+        for (StronzExternalController controller in this.externalControllers)
+            await controller.onEvent(StronzExternalControllerEvent.play);
+    }
+
+    @mustCallSuper
+    Future<void> pause() async {
+        for (StronzExternalController controller in this.externalControllers)
+            await controller.onEvent(StronzExternalControllerEvent.pause);
+    } 
+    
     @mustCallSuper
     Future<void> setVolume(double volume) async {
         PlayerPreferences.volume = volume;
         await PlayerPreferences.instance.serialize();
     }
 
-    Future<void> seekTo(Duration position);
+    @mustCallSuper
+    Future<void> seekTo(Duration position) async {
+        for (StronzExternalController controller in this.externalControllers)
+            await controller.onEvent(StronzExternalControllerEvent.seekTo, arg: position);
+    }
+
     Future<void> setVideoTrack(VideoTrack? track);
     Future<void> setAudioTrack(AudioTrack? track);
     Future<void> setCaptionTrack(CaptionTrack? track);
