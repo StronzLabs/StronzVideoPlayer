@@ -27,9 +27,6 @@ class MediaSessionExternalController extends StronzExternalController {
     }
 
     @override
-    Future<void> onEvent(StronzExternalControllerEvent event, {dynamic arg}) async {}
-
-    @override
     Future<void> switchTo(Playable playable) {
         return MediaSession.switchTo(playable.title, playable.thumbnail);
     }

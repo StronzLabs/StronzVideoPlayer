@@ -173,6 +173,7 @@ abstract class StronzPlayerController {
 
     StronzControllerState get state => StronzControllerState(
         playing: this.playing,
+        buffering: this.buffering,
         position: this.position,
         volume: this.volume,
         videoTrack: this.videoTrack?.quality,
@@ -242,17 +243,19 @@ abstract class StronzPlayerController {
             await controller.dispose();
     }
 
-    @mustCallSuper
-    Future<void> play() async {
+    Future<bool> _dispatchEvent(StronzExternalControllerEvent event, {dynamic arg}) async {
+        bool result = true;
         for (StronzExternalController controller in this.externalControllers)
-            await controller.onEvent(StronzExternalControllerEvent.play);
+            if(!await controller.onEvent(event, arg: arg))
+                result = false;
+        return result;
     }
 
     @mustCallSuper
-    Future<void> pause() async {
-        for (StronzExternalController controller in this.externalControllers)
-            await controller.onEvent(StronzExternalControllerEvent.pause);
-    } 
+    Future<bool> play() => this._dispatchEvent(StronzExternalControllerEvent.play);
+
+    @mustCallSuper
+    Future<bool> pause() => this._dispatchEvent(StronzExternalControllerEvent.pause);
     
     @mustCallSuper
     Future<void> setVolume(double volume) async {
@@ -261,10 +264,7 @@ abstract class StronzPlayerController {
     }
 
     @mustCallSuper
-    Future<void> seekTo(Duration position) async {
-        for (StronzExternalController controller in this.externalControllers)
-            await controller.onEvent(StronzExternalControllerEvent.seekTo, arg: position);
-    }
+    Future<bool> seekTo(Duration position) => this._dispatchEvent(StronzExternalControllerEvent.seekTo, arg: position);
 
     Future<void> setVideoTrack(VideoTrack? track);
     Future<void> setAudioTrack(AudioTrack? track);

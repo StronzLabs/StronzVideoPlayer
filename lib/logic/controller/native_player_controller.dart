@@ -118,17 +118,21 @@ class NativePlayerController extends StronzPlayerController {
     }
 
     @override
-    Future<void> play() async {
-        await super.play();
+    Future<bool> play() async {
+        if(!await super.play())
+            return false;
         await WakelockPlus.enable();
         await this._videoPlayerController?.play();
+        return true;
     }
 
     @override
-    Future<void> pause() async {
-        await super.pause();
+    Future<bool> pause() async {
+        if(!await super.pause())
+            return false;
         await WakelockPlus.disable();
         await this._videoPlayerController?.pause();
+        return true;
     }
 
     @override
@@ -138,9 +142,11 @@ class NativePlayerController extends StronzPlayerController {
     }
 
     @override
-    Future<void> seekTo(Duration position) async {
-        await super.seekTo(position);
+    Future<bool> seekTo(Duration position) async {
+        if(!await super.seekTo(position))
+            return false;
         await this._videoPlayerController?.seekTo(position);
+        return true;
     }
 
     @override

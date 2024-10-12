@@ -2,6 +2,7 @@ import 'package:stronz_video_player/data/player_preferences.dart';
 
 class StronzControllerState {
     final bool? playing;
+    final bool? buffering;
     final Duration? position;
     final double? volume;
     final int? videoTrack;
@@ -10,6 +11,7 @@ class StronzControllerState {
 
     StronzControllerState({
         this.playing,
+        this.buffering,
         this.position,
         double? volume,
         int? videoTrack,
@@ -21,6 +23,7 @@ class StronzControllerState {
         this.captionTrack = captionTrack ?? PlayerPreferences.captionTrack;
 
     StronzControllerState.autoPlay({
+        bool? buffering,
         Duration? position,
         double? volume,
         int? videoTrack,
@@ -28,6 +31,7 @@ class StronzControllerState {
         String? captionTrack
     }) : this(
         playing: true,
+        buffering: buffering,
         position: position,
         volume: volume,
         videoTrack: videoTrack,
@@ -37,6 +41,7 @@ class StronzControllerState {
 
     StronzControllerState copyWith({
         bool? playing,
+        bool? buffering,
         Duration? position,
         double? volume,
         int? videoTrack,
@@ -45,6 +50,7 @@ class StronzControllerState {
     }) {
         return StronzControllerState(
             playing: playing ?? this.playing,
+            buffering: buffering ?? this.buffering,
             position: position ?? this.position,
             volume: volume ?? this.volume,
             videoTrack: videoTrack ?? this.videoTrack,

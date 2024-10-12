@@ -13,6 +13,6 @@ abstract class StronzExternalController {
     Future<void> dispose();
 
     Future<void> informState(StronzControllerState state);
-    Future<void> onEvent(StronzExternalControllerEvent event, {dynamic arg});
+    Future<bool> onEvent(StronzExternalControllerEvent event, {dynamic arg}) async => true;
     Future<void> switchTo(Playable playable);
 }
