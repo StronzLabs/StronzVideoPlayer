@@ -160,11 +160,11 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
                                                 for (DurationRange bufferRange in this._buffered)
                                                     Transform.translate(
                                                         offset: Offset(
-                                                            constraints.maxWidth * (bufferRange.start.inMilliseconds / this._duration.inMilliseconds),
+                                                            constraints.maxWidth * (this._duration == Duration.zero ? 0.0 : bufferRange.start.inMilliseconds / this._duration.inMilliseconds),
                                                             0.0,
                                                         ),
                                                         child: Container(
-                                                            width: constraints.maxWidth * (bufferRange.end.inMilliseconds / this._duration.inMilliseconds),
+                                                            width: constraints.maxWidth * (this._duration  == Duration.zero ? 0.0 : bufferRange.end.inMilliseconds / this._duration.inMilliseconds),
                                                             color: const Color(0x3DFFFFFF)
                                                         ),
                                                     ),
