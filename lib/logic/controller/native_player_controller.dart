@@ -38,7 +38,7 @@ class NativePlayerController extends StronzPlayerController {
         switch (this.tracks.runtimeType) {
             case HLSTracks:
                 this._generateHLSFile();
-                uri = Uri.parse("http://${this._server!.address.address}:${this._server!.port}");
+                uri = Uri.parse("http://${this._server!.address.address}:${this._server!.port}/index.m3u8");
                 break;
             case MP4Tracks:
                 uri = this.videoTrack!.uri;
