@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:path_provider/path_provider.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/tracks.dart';
@@ -20,7 +19,10 @@ class NativePlayerController extends StronzPlayerController {
     VideoPlayerController? get videoPlayerControllerOrNull => this._videoPlayerController;
     VideoPlayerController get videoPlayerController => this._videoPlayerController!;
 
-    Future<File> _generateHLSFile() async {
+    HttpServer? _server;
+    late String _hls;
+
+    void _generateHLSFile() {
         String hls = "#EXTM3U\n";
         if(this.audioTrack != null)
             hls += '#EXT-X-MEDIA:TYPE=AUDIO,NAME="${this.audioTrack!.language}",GROUP-ID="audio",URI="${this.audioTrack!.uri.toString()}"\n';
@@ -28,20 +30,24 @@ class NativePlayerController extends StronzPlayerController {
             hls += '#EXT-X-MEDIA:TYPE=SUBTITLES,NAME="${this.captionTrack!.language}",GROUP-ID="subs",URI="${this.captionTrack!.uri.toString()}"\n';
         hls += '#EXT-X-STREAM-INF:BANDWIDTH=${this.videoTrack!.bandwidth},AUDIO="audio",SUBTITLES="subs"\n${this.videoTrack!.uri.toString()}';
         
-        Directory tempDir = await getTemporaryDirectory();
-        File tempHls = File("${tempDir.path}/stronz_video_player.m3u8");
-        await tempHls.writeAsString(hls);
-        return tempHls;
+        this._hls = hls;
     }
 
     Future<VideoPlayerController> _prepareVideoPlayerController() async {
-        File hls = await this._generateHLSFile();
-        if(this.tracks is HLSTracks)
-            return VideoPlayerController.file(hls);
-        else if(this.tracks is MP4Tracks)
-            return VideoPlayerController.networkUrl(this.videoTrack!.uri);
-        else
-            throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
+        Uri uri;
+        switch (this.tracks.runtimeType) {
+            case HLSTracks:
+                this._generateHLSFile();
+                uri = Uri.parse("http://${this._server!.address.address}:${this._server!.port}");
+                break;
+            case MP4Tracks:
+                uri = this.videoTrack!.uri;
+                break;
+            default:
+                throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
+        }
+
+        return VideoPlayerController.networkUrl(uri);
     }
 
     Future<void> _refreshHLSFile() async {
@@ -78,11 +84,27 @@ class NativePlayerController extends StronzPlayerController {
         newController.addListener(bufferingListener);
     }
 
+    Future<void> _startServer() async {
+        await this._closeServer();
+        this._server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8123);
+        this._server!.forEach((request) {
+            request.response.headers.contentType = ContentType.parse("application/vnd.apple.mpegurl");
+            request.response.write(this._hls);
+            request.response.close();
+        });
+    }
+
+    Future<void> _closeServer() async {
+        if(this._server != null)
+            await this._server!.close(force: true);
+    }
+
     @override
     Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
         await super.initialize(playable);
         await WakelockPlus.enable();
 
+        await this._startServer();
         await this._initializeVideoPlayerController();
 
         if(initialState == null)
@@ -113,6 +135,7 @@ class NativePlayerController extends StronzPlayerController {
     @override
     Future<void> dispose() async {
         await this._disposeVideoPlayerController();
+        await this._closeServer();
         await WakelockPlus.disable();
         await super.dispose();
     }
