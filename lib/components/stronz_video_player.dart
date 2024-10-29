@@ -43,9 +43,7 @@ class StronzVideoPlayer extends StatefulWidget {
         await SUtils.ensureInitialized();
         await PlayerPreferences.instance.unserialize();
         fvp.registerWith(options: {'platforms': [
-            'windows',
             'linux',
-            'macos',
             if(EPlatform.isAndroidTV)
                 'android'
         ]});
