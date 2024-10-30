@@ -9,8 +9,6 @@ import 'package:stronz_video_player/components/video_player_view.dart';
 import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/player_preferences.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
-import 'package:stronz_video_player/logic/controller/media_session_external_controller.dart';
-import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/sutils.dart';
 
@@ -27,14 +25,13 @@ class StronzVideoPlayer extends StatefulWidget {
     StronzVideoPlayer({
         super.key,
         required this.playable,
-        StronzPlayerController? controller,
+        required this.controller,
         StronzControllerState? controllerState,
         this.additionalControlsBuilder,
         this.controlsBuilder,
         this.videoBuilder,
         this.onBeforeExit
-    }) : this.controller = controller ?? NativePlayerController([MediaSessionExternalController()]),
-        this.controllerState = controllerState ?? StronzControllerState.autoPlay();
+    }) : this.controllerState = controllerState ?? StronzControllerState.autoPlay();
 
     @override
     State<StronzVideoPlayer> createState() => _StronzVideoPlayerState();
@@ -74,7 +71,6 @@ class _StronzVideoPlayerState extends State<StronzVideoPlayer> with WidgetsBindi
 
     @override
     void dispose() {
-        this._playerController.dispose();
         this._titleSubscription?.cancel();
         WidgetsBinding.instance.removeObserver(this);
         super.dispose();
