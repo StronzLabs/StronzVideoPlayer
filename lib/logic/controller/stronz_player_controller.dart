@@ -16,6 +16,9 @@ abstract class StronzPlayerController {
     List<StronzExternalController> externalControllers;
     StronzPlayerController(this.externalControllers);
 
+    bool _initialized = false;
+    bool get initialized => this._initialized;
+
     late Playable _playable;
     Playable get playable => this._playable;
 
@@ -211,6 +214,8 @@ abstract class StronzPlayerController {
 
     @mustCallSuper
     Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
+        if(this.initialized)
+            return;
         this._playable = playable;
 
         for (StronzExternalController controller in this.externalControllers) {
@@ -222,10 +227,14 @@ abstract class StronzPlayerController {
         }
 
         await this._loadTracks(initialState);
+        this._initialized = true;
     }
 
     @mustCallSuper
     Future<void> dispose() async {
+        if(!this.initialized)
+            return;
+
         this._bufferingStreamController.close();
         this._aspectRatioStreamController.close();
         this._playingStreamController.close();

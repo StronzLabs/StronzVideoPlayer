@@ -101,6 +101,8 @@ class NativePlayerController extends StronzPlayerController {
 
     @override
     Future<void> initialize(Playable playable, {StronzControllerState? initialState}) async {
+        if(super.initialized)
+            return;
         await super.initialize(playable);
         await WakelockPlus.enable();
 
@@ -134,6 +136,8 @@ class NativePlayerController extends StronzPlayerController {
 
     @override
     Future<void> dispose() async {
+        if(!super.initialized)
+            return;
         await this._disposeVideoPlayerController();
         await this._closeServer();
         await WakelockPlus.disable();
