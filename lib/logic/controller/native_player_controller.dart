@@ -25,9 +25,9 @@ class NativePlayerController extends StronzPlayerController {
     void _generateHLSFile() {
         String hls = "#EXTM3U\n";
         if(this.audioTrack != null)
-            hls += '#EXT-X-MEDIA:TYPE=AUDIO,NAME="${this.audioTrack!.language}",GROUP-ID="audio",URI="${this.audioTrack!.uri.toString()}"\n';
+            hls += '#EXT-X-MEDIA:TYPE=AUDIO,NAME="${this.audioTrack!.language}",GROUP-ID="audio",DEFAULT=YES,URI="${this.audioTrack!.uri.toString()}"\n';
         if(this.captionTrack != null)
-            hls += '#EXT-X-MEDIA:TYPE=SUBTITLES,NAME="${this.captionTrack!.language}",GROUP-ID="subs",URI="${this.captionTrack!.uri.toString()}"\n';
+            hls += '#EXT-X-MEDIA:TYPE=SUBTITLES,NAME="${this.captionTrack!.language}",GROUP-ID="subs",DEFAULT=YES,URI="${this.captionTrack!.uri.toString()}"\n';
         hls += '#EXT-X-STREAM-INF:BANDWIDTH=${this.videoTrack!.bandwidth}${this.audioTrack != null ? ',AUDIO="audio"' : ''}${this.captionTrack != null ? ',SUBTITLES="subs"' : ''}\n${this.videoTrack!.uri.toString()}';
         
         this._hls = hls;
