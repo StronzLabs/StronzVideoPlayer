@@ -89,7 +89,7 @@ class NativePlayerController extends StronzPlayerController {
 
     Future<void> _startServer() async {
         await this._closeServer();
-        this._server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8123);
+        this._server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
         this._server!.forEach((request) {
             request.response.headers.contentType = ContentType.parse("application/vnd.apple.mpegurl");
             request.response.write(this._hls);
