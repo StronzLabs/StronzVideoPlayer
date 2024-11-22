@@ -49,7 +49,8 @@ class NativePlayerController extends StronzPlayerController {
         }
 
         return VideoPlayerController.networkUrl(uri,
-            httpHeaders: {"User-Agent": HTTP.userAgent}
+            // TODO: https://github.com/jakky1/video_player_win/issues/45
+            httpHeaders: this.tracks is MP4Tracks ? {"User-Agent": HTTP.userAgent} : {}
         );
     }
 
