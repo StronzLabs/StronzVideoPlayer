@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stronz_video_player/components/platform/desktop_video_player_controls.dart';
 import 'package:stronz_video_player/components/platform/mobile_video_player_controls.dart';
 import 'package:stronz_video_player/components/platform/tv_video_player_controls.dart';
-import 'package:sutils/sutils.dart';
+import 'package:sutils/utils.dart';
 
 typedef AdditionalStronzControlsBuilder = List<Widget> Function(BuildContext context, void Function() onMenuOpened, void Function() onMenuClosed);
 

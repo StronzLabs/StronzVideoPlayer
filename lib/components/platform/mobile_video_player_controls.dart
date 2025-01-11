@@ -10,7 +10,7 @@ import 'package:stronz_video_player/components/controls/settings_button.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/components/controls/volume_button.dart';
 import 'package:stronz_video_player/components/video_player_controls.dart';
-import 'package:sutils/sutils.dart';
+import 'package:sutils/utils.dart';
 
 
 class MobileVideoPlayerControls extends VideoPlayerControls {

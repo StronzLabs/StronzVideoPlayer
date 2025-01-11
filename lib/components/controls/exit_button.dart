@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sutils/sutils.dart';
+import 'package:sutils/utils.dart';
 
 class ExitButton extends StatelessWidget {
     final double iconSize;

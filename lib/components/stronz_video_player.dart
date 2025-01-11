@@ -10,7 +10,7 @@ import 'package:stronz_video_player/data/playable.dart';
 import 'package:stronz_video_player/data/player_preferences.dart';
 import 'package:stronz_video_player/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
-import 'package:sutils/sutils.dart';
+import 'package:sutils/utils.dart';
 
 class StronzVideoPlayer extends StatefulWidget {
     final Playable playable;
@@ -37,7 +37,6 @@ class StronzVideoPlayer extends StatefulWidget {
     State<StronzVideoPlayer> createState() => _StronzVideoPlayerState();
 
     static Future<void> initialize() async {
-        await SUtils.ensureInitialized();
         await PlayerPreferences.instance.unserialize();
         fvp.registerWith(options: {'platforms': [
             'linux',

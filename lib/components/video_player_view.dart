@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
 import 'package:stronz_video_player/logic/controller/native_player_controller.dart';
-import 'package:sutils/sutils.dart';
+import 'package:sutils/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerView extends StatefulWidget {

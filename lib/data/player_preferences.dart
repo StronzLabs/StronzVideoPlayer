@@ -1,4 +1,4 @@
-import 'package:sutils/sutils.dart';
+import 'package:sutils/logic/storage/local_storage.dart';
 
 class PlayerPreferences extends LocalStorage {
     static final PlayerPreferences instance = PlayerPreferences._();

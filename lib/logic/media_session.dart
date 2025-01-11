@@ -7,7 +7,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:smtc_windows/smtc_windows.dart';
 
 import 'package:image/image.dart' as img;
-import 'package:sutils/sutils.dart';
+import 'package:sutils/utils.dart';
 
 enum MediaSessionEvent {
     play,
