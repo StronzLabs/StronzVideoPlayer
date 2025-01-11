@@ -8,7 +8,6 @@ import 'package:stronz_video_player/data/controller_stream.dart';
 import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/controller/stronz_external_controller.dart';
 import 'package:stronz_video_player/logic/track_loader.dart';
-import 'package:sutils/sutils.dart';
 import 'package:video_player/video_player.dart';
 
 abstract class StronzPlayerController {
@@ -201,12 +200,12 @@ abstract class StronzPlayerController {
                 (element) => element.quality == (initialState?.videoTrack ?? PlayerPreferences.videoTrack),
                 orElse: () => tracks.video.reduce((a, b) => a.quality > b.quality ? a : b)
             );
-            this.audioTrack = tracks.audio.firstWhereOrNull(
+            this.audioTrack = tracks.audio.where(
                 (element) => element.language == (initialState?.audioTrack ?? PlayerPreferences.audioTrack),
-            ) ?? tracks.audio.firstOrNull;
-            this.captionTrack = tracks.caption.firstWhereOrNull(
+            ).firstOrNull ?? tracks.audio.firstOrNull;
+            this.captionTrack = tracks.caption.where(
                 (element) => element.language == (initialState?.captionTrack ?? PlayerPreferences.captionTrack)
-            );
+            ).firstOrNull;
 
         } else 
             throw Exception("Unsupported tracks type: ${this.tracks.runtimeType}");
