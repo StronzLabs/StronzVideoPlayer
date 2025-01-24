@@ -50,7 +50,7 @@ class NativePlayerController extends StronzPlayerController {
 
         return VideoPlayerController.networkUrl(uri,
             // TODO: https://github.com/jakky1/video_player_win/issues/45
-            httpHeaders: this.tracks is MP4Tracks ? {"User-Agent": HTTP.userAgent} : {}
+            httpHeaders: Platform.isWindows && this.tracks is HLSTracks ? {} : {"User-Agent": HTTP.userAgent}
         );
     }
 
