@@ -7,7 +7,6 @@ import 'package:stronz_video_player/data/tracks.dart';
 import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/utils.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 class NativePlayerController extends StronzPlayerController {
 
@@ -108,7 +107,7 @@ class NativePlayerController extends StronzPlayerController {
         if(super.initialized)
             return;
         await super.initialize(playable);
-        await WakelockPlus.enable();
+        await SafeWakelock.enable();
 
         await this._startServer();
         await this._initializeVideoPlayerController();
@@ -144,7 +143,7 @@ class NativePlayerController extends StronzPlayerController {
             return;
         await this._disposeVideoPlayerController();
         await this._closeServer();
-        await WakelockPlus.disable();
+        await SafeWakelock.disable();
         await super.dispose();
     }
 
@@ -152,7 +151,7 @@ class NativePlayerController extends StronzPlayerController {
     Future<bool> play() async {
         if(!await super.play())
             return false;
-        await WakelockPlus.enable();
+        await SafeWakelock.enable();
         await this._videoPlayerController?.play();
         return true;
     }
@@ -161,7 +160,7 @@ class NativePlayerController extends StronzPlayerController {
     Future<bool> pause() async {
         if(!await super.pause())
             return false;
-        await WakelockPlus.disable();
+        await SafeWakelock.disable();
         await this._videoPlayerController?.pause();
         return true;
     }

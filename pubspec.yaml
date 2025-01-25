@@ -21,7 +21,6 @@ dependencies:
     git: https://github.com/Bonfra04/flutter_hls_parser.git
   path_provider: ^2.1.4
 
-  wakelock_plus: ^1.2.8
   image: ^4.2.0
   audio_service: ^0.18.15
   audio_service_mpris: ^0.1.5
