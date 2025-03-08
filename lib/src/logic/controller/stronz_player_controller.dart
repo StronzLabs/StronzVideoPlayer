@@ -155,6 +155,18 @@ abstract class StronzPlayerController {
         }
     }
 
+    Caption _caption = Caption.none;
+    Caption get caption => this._caption;
+    final StreamController<Caption> _captionStreamController = StreamController<Caption>.broadcast();
+    @protected
+    set caption(Caption caption) {
+        if(this._caption != caption) {
+            this._captionStreamController.add(this._caption = caption);
+            for (StronzExternalController controller in this.externalControllers)
+                controller.informState(this.state);
+        }
+    }
+
     String get title => this.playable.title;
     final StreamController<String> _titleStreamController = StreamController<String>.broadcast();
 
@@ -170,6 +182,7 @@ abstract class StronzPlayerController {
         audioTrack: this._audioTrackStreamController.stream,
         captionTrack: this._captionTrackStreamController.stream,
         buffered: this._bufferedStreamController.stream,
+        caption: this._captionStreamController.stream,
         title: this._titleStreamController.stream,
     );
 

@@ -220,5 +220,6 @@ class NativePlayerController extends StronzPlayerController {
         super.duration = this.videoPlayerController.value.duration;
         super.buffered = this.videoPlayerController.value.buffered;
         super.completed = this.videoPlayerController.value.position == this.videoPlayerController.value.duration;
+        super.caption = this.videoPlayerController.value.caption;
     }
 }

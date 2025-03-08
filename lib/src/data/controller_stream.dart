@@ -13,6 +13,7 @@ class ControllerStream {
     final Stream<AudioTrack?> audioTrack;
     final Stream<CaptionTrack?> captionTrack;
     final Stream<List<DurationRange>> buffered;
+    final Stream<Caption> caption;
     final Stream<String> title;
 
     const ControllerStream({
@@ -27,6 +28,7 @@ class ControllerStream {
         required this.audioTrack,
         required this.captionTrack,
         required this.buffered,
+        required this.caption,
         required this.title
     });
 }
