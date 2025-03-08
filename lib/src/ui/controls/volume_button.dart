@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
-import 'package:stronz_video_player/components/linear_track_shape.dart';
-import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:stronz_video_player/src/ui/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/src/ui/widgets/linear_track_shape.dart';
+import 'package:stronz_video_player/src/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/utils.dart';
 
 class VolumeButton extends StatefulWidget {

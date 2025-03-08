@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/data/player_preferences.dart';
-import 'package:stronz_video_player/data/stronz_controller_state.dart';
-import 'package:stronz_video_player/data/playable.dart';
-import 'package:stronz_video_player/data/controller_stream.dart';
-import 'package:stronz_video_player/data/tracks.dart';
-import 'package:stronz_video_player/logic/controller/stronz_external_controller.dart';
-import 'package:stronz_video_player/logic/track_loader.dart';
+import 'package:stronz_video_player/src/data/player_preferences.dart';
+import 'package:stronz_video_player/src/data/stronz_controller_state.dart';
+import 'package:stronz_video_player/src/data/playable.dart';
+import 'package:stronz_video_player/src/data/controller_stream.dart';
+import 'package:stronz_video_player/src/data/tracks.dart';
+import 'package:stronz_video_player/src/logic/controller/stronz_external_controller.dart';
+import 'package:stronz_video_player/src/logic/track_loader.dart';
 import 'package:video_player/video_player.dart';
 
 abstract class StronzPlayerController {

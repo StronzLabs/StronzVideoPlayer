@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
-import 'package:stronz_video_player/data/player_preferences.dart';
-import 'package:stronz_video_player/data/tracks.dart';
-import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:stronz_video_player/src/ui/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/src/data/player_preferences.dart';
+import 'package:stronz_video_player/src/data/tracks.dart';
+import 'package:stronz_video_player/src/logic/controller/stronz_player_controller.dart';
 
 class SettingsButton extends StatefulWidget {
     final double iconSize;

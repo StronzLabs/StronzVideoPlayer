@@ -12,7 +12,7 @@ class ExitButton extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
         return IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             iconSize: this.iconSize,
             onPressed: () async {
                 if(await FullScreen.check())

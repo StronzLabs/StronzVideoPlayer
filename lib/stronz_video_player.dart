@@ -1,9 +1,29 @@
-library stronz_video_player;
+import 'package:flutter/material.dart';
+import 'package:stronz_video_player/src/data/player_preferences.dart';
+import 'package:sutils/utils.dart';
+import 'package:fvp/fvp.dart' as fvp;
 
-export 'package:stronz_video_player/data/playable.dart';
-export 'package:stronz_video_player/data/tracks.dart';
-export 'package:stronz_video_player/components/stronz_video_player.dart';
-export 'package:stronz_video_player/components/controls/stronz_player_control.dart';
-export 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
-export 'package:stronz_video_player/logic/controller/stronz_external_controller.dart';
-export 'package:stronz_video_player/data/stronz_controller_state.dart';
+final class StronzVideoPlayer {
+    static late Future<void> Function() _initializer;
+    static bool _initialized = false;
+
+    static Future<void> ensureInitialized() async {
+        if(StronzVideoPlayer._initialized)
+            return;
+        StronzVideoPlayer._initialized = true;
+        await StronzVideoPlayer._initializer();
+    }
+
+    static void registerWith() {
+        StronzVideoPlayer._initializer = () async {
+            WidgetsFlutterBinding.ensureInitialized();
+            await PlayerPreferences.instance.unserialize();
+            fvp.registerWith(options: {'platforms': [
+                'linux',
+                // Floating pixels
+                if(EPlatform.isAndroidTV)
+                    'android'
+            ]});
+        };
+    }
+}

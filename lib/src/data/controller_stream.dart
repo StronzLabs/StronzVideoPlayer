@@ -1,4 +1,4 @@
-import 'package:stronz_video_player/data/tracks.dart';
+import 'package:stronz_video_player/src/data/tracks.dart';
 import 'package:video_player/video_player.dart';
 
 class ControllerStream {

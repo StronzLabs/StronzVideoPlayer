@@ -1,5 +1,5 @@
-import 'package:stronz_video_player/data/playable.dart';
-import 'package:stronz_video_player/data/stronz_controller_state.dart';
+import 'package:stronz_video_player/src/data/playable.dart';
+import 'package:stronz_video_player/src/data/stronz_controller_state.dart';
 
 enum StronzExternalControllerEvent {
     play,

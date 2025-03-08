@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stronz_video_player/components/controls/media_title.dart';
-import 'package:stronz_video_player/components/controls/next_button.dart';
-import 'package:stronz_video_player/components/controls/playpause_button.dart';
-import 'package:stronz_video_player/components/controls/position_indicator.dart';
-import 'package:stronz_video_player/components/controls/seek_bar.dart';
-import 'package:stronz_video_player/components/controls/settings_button.dart';
-import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
-import 'package:stronz_video_player/components/video_player_controls.dart';
+import 'package:stronz_video_player/src/ui/controls/media_title.dart';
+import 'package:stronz_video_player/src/ui/controls/next_button.dart';
+import 'package:stronz_video_player/src/ui/controls/playpause_button.dart';
+import 'package:stronz_video_player/src/ui/controls/position_indicator.dart';
+import 'package:stronz_video_player/src/ui/controls/seek_bar.dart';
+import 'package:stronz_video_player/src/ui/controls/settings_button.dart';
+import 'package:stronz_video_player/src/ui/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/src/ui/widgets/video_player_controls.dart';
 
 
 class TvVideoPlayerControls extends VideoPlayerControls {

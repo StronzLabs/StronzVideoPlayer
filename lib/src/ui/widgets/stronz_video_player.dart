@@ -4,12 +4,12 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fvp/fvp.dart' as fvp;
 import 'package:provider/provider.dart';
-import 'package:stronz_video_player/components/platform/adaptive_stronz_video_player_controls.dart';
-import 'package:stronz_video_player/components/video_player_view.dart';
-import 'package:stronz_video_player/data/playable.dart';
-import 'package:stronz_video_player/data/player_preferences.dart';
-import 'package:stronz_video_player/data/stronz_controller_state.dart';
-import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:stronz_video_player/src/ui/platform/adaptive_stronz_video_player_controls.dart';
+import 'package:stronz_video_player/src/ui/widgets/video_player_view.dart';
+import 'package:stronz_video_player/src/data/playable.dart';
+import 'package:stronz_video_player/src/data/player_preferences.dart';
+import 'package:stronz_video_player/src/data/stronz_controller_state.dart';
+import 'package:stronz_video_player/src/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/utils.dart';
 
 class StronzVideoPlayer extends StatefulWidget {

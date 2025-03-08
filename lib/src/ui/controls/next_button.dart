@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stronz_video_player/components/controls/stronz_player_control.dart';
-import 'package:stronz_video_player/data/playable.dart';
+import 'package:stronz_video_player/src/ui/controls/stronz_player_control.dart';
+import 'package:stronz_video_player/src/data/playable.dart';
 
 class NextButton extends StatefulWidget {
     final double iconSize;

@@ -5,8 +5,7 @@ version: 0.0.1
 publish_to: 'none'
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: ^3.6.0
 
 dependencies:
   flutter:
@@ -48,3 +47,15 @@ dependency_overrides:
     git:
       url: https://github.com/flutter/packages.git
       path: ./packages/video_player/video_player
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        dartPluginClass: StronzVideoPlayer
+      macos:
+        dartPluginClass: StronzVideoPlayer
+      windows:
+        dartPluginClass: StronzVideoPlayer
+      linux:
+        dartPluginClass: StronzVideoPlayer

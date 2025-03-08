@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:stronz_video_player/data/stronz_controller_state.dart';
-import 'package:stronz_video_player/data/playable.dart';
-import 'package:stronz_video_player/data/tracks.dart';
-import 'package:stronz_video_player/logic/controller/stronz_player_controller.dart';
+import 'package:stronz_video_player/src/data/stronz_controller_state.dart';
+import 'package:stronz_video_player/src/data/playable.dart';
+import 'package:stronz_video_player/src/data/tracks.dart';
+import 'package:stronz_video_player/src/logic/controller/stronz_player_controller.dart';
 import 'package:sutils/utils.dart';
 import 'package:video_player/video_player.dart';
 

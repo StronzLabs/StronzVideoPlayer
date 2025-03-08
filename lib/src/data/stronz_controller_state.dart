@@ -1,4 +1,4 @@
-import 'package:stronz_video_player/data/player_preferences.dart';
+import 'package:stronz_video_player/src/data/player_preferences.dart';
 
 class StronzControllerState {
     final bool? playing;
