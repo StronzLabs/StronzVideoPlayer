@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+        ".dart_tool/": true,
+        "pubspec.lock": true,
+        ".metadata": true,
+        ".flutter-plugins": true,
+        ".flutter-plugins-dependencies": true
+    }
+}
