@@ -178,6 +178,30 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
                                         ),
                                     ),
                                     Positioned(
+                                        left: (constraints.maxWidth - 12 / 2) * this._slider,
+                                        child: Transform.translate(
+                                            offset: const Offset(0.0, -25.0),
+                                            child: FractionalTranslation(
+                                                translation: const Offset(-0.5, 0.0),
+                                                child: AnimatedContainer(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                                    height: this._hover || this._click ? 25.0 : 0.0,
+                                                    duration: this._hover || this._click ? const Duration(milliseconds: 150) : Duration.zero,
+                                                    decoration: BoxDecoration(
+                                                        color: Theme.of(context).disabledColor,
+                                                        borderRadius: BorderRadius.circular(12 / 2),
+                                                    ),
+                                                    transform: Matrix4.translationValues(
+                                                        0.0,
+                                                        this._hover || this._click ? 0.0 : 25.0,
+                                                        0.0,
+                                                    ),
+                                                    child: Text((this._duration * this._slider).label())
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    Positioned(
                                         left: this._click
                                             ? (constraints.maxWidth - 12 / 2) * this._slider
                                             : (constraints.maxWidth - 12 / 2) * positionPercent,
@@ -198,5 +222,27 @@ class _SeekBarState extends State<SeekBar> with StronzPlayerControl {
                 ),
             ),
         );
+    }
+}
+
+extension _DurationExtension on Duration {
+    String label({Duration? reference}) {
+        reference ??= this;
+        if (reference > const Duration(days: 1)) {
+            final days = inDays.toString().padLeft(3, '0');
+            final hours = (inHours - (inDays * 24)).toString().padLeft(2, '0');
+            final minutes = (inMinutes - (inHours * 60)).toString().padLeft(2, '0');
+            final seconds = (inSeconds - (inMinutes * 60)).toString().padLeft(2, '0');
+            return '$days:$hours:$minutes:$seconds';
+        } else if (reference > const Duration(hours: 1)) {
+            final hours = inHours.toString().padLeft(2, '0');
+            final minutes = (inMinutes - (inHours * 60)).toString().padLeft(2, '0');
+            final seconds = (inSeconds - (inMinutes * 60)).toString().padLeft(2, '0');
+            return '$hours:$minutes:$seconds';
+        } else {
+            final minutes = inMinutes.toString().padLeft(2, '0');
+            final seconds = (inSeconds - (inMinutes * 60)).toString().padLeft(2, '0');
+            return '$minutes:$seconds';
+        }
     }
 }
