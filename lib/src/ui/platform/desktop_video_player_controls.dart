@@ -150,11 +150,11 @@ class _DesktopVideoControlsState extends VideoPlayerControlsState<DesktopVideoPl
                    super.controller(context, listen: false).seekTo(rate);
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowUp): () {
-                    final volume = super.controller(context, listen: false).volume + 5.0;
+                    final volume = super.controller(context, listen: false).volume + 0.1;
                     super.controller(context, listen: false).setVolume(volume.clamp(0.0, 100.0));
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowDown): () {
-                    final volume = super.controller(context, listen: false).volume - 5.0;
+                    final volume = super.controller(context, listen: false).volume - 0.1;
                     super.controller(context, listen: false).setVolume(volume.clamp(0.0, 100.0));
                 },
                 const SingleActivator(LogicalKeyboardKey.keyM): () {
