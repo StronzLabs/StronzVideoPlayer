@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:fvp/fvp.dart' as fvp;
 import 'package:provider/provider.dart';
 import 'package:stronz_video_player/src/ui/platform/adaptive_stronz_video_player_controls.dart';
 import 'package:stronz_video_player/src/ui/widgets/video_player_view.dart';
 import 'package:stronz_video_player/src/data/playable.dart';
-import 'package:stronz_video_player/src/data/player_preferences.dart';
 import 'package:stronz_video_player/src/data/stronz_controller_state.dart';
 import 'package:stronz_video_player/src/logic/controller/stronz_player_controller.dart';
-import 'package:sutils/utils.dart';
 
 class StronzVideoPlayer extends StatefulWidget {
     final Playable playable;
@@ -35,15 +32,6 @@ class StronzVideoPlayer extends StatefulWidget {
 
     @override
     State<StronzVideoPlayer> createState() => _StronzVideoPlayerState();
-
-    static Future<void> initialize() async {
-        await PlayerPreferences.instance.unserialize();
-        fvp.registerWith(options: {'platforms': [
-            'linux',
-            if(EPlatform.isAndroidTV)
-                'android'
-        ]});
-    }
 }
 
 class _StronzVideoPlayerState extends State<StronzVideoPlayer> with WidgetsBindingObserver {
