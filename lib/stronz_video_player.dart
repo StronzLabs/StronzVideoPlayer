@@ -26,7 +26,7 @@ final class StronzVideoPlayer {
                 // Tizen shit
                 if(Platform.isLinux)
                     'linux',
-                // Floating pixels
+                // Floating pixels (try to play endgame without it)
                 if(EPlatform.isAndroidTV)
                     'android'
             ]});
