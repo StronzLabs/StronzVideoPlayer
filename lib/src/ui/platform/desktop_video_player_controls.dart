@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stronz_video_player/src/ui/controls/exit_button.dart';
+import 'package:stronz_video_player/src/ui/controls/floating_player_button.dart';
 import 'package:stronz_video_player/src/ui/controls/full_screen_button.dart';
 import 'package:stronz_video_player/src/ui/controls/media_title.dart';
 import 'package:stronz_video_player/src/ui/controls/next_button.dart';
@@ -92,6 +93,7 @@ class _DesktopVideoControlsState extends VideoPlayerControlsState<DesktopVideoPl
                             onOpened: super.onMenuOpened,
                             onClosed: super.onMenuClosed,
                         ),
+                        const FloatingPlayerButton(),
                         const FullScreenButton()
                     ]
                 )
