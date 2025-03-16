@@ -10,7 +10,9 @@ import 'package:video_player/video_player.dart';
 
 class NativePlayerController extends StronzPlayerController {
 
-    NativePlayerController(super.externalControllers);
+    NativePlayerController({
+        super.externalControllers
+    });
     
     VideoPlayerController? _videoPlayerController;
     final StreamController<VideoPlayerController?> _videoPlayerControllerController = StreamController<VideoPlayerController?>.broadcast();

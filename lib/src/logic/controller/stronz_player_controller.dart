@@ -13,7 +13,10 @@ import 'package:video_player/video_player.dart';
 abstract class StronzPlayerController {
 
     List<StronzExternalController> externalControllers;
-    StronzPlayerController(this.externalControllers);
+
+    StronzPlayerController({
+        this.externalControllers = const []
+    });
 
     bool _initialized = false;
     bool get initialized => this._initialized;
