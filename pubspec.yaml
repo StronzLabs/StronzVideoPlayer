@@ -47,6 +47,8 @@ flutter:
     platforms:
       android:
         dartPluginClass: StronzVideoPlayer
+      ios:
+        dartPluginClass: StronzVideoPlayer
       macos:
         dartPluginClass: StronzVideoPlayer
       windows:
